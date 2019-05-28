@@ -4,20 +4,23 @@ dataset.  This script is used as a test for the AWS_foryou algo_runner component
 """
 
 import importlib
-import numpy as np
 import os
-import pandas as pd
 import re
 import sys
 import time
+import numpy as np
+import pandas as pd
 
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def find_data_target(python_call):
     """
-    Finds the location of 'data_loc = ' and 'target_loc = ' in python_call.  Helper function for algo_runner.
+    Finds the location of 'data_loc = ' and 'target_loc = ' in python_call.  Helper function for
+    algo_runner.
 
-    :param python_call: string that calls a python function with data_loc and target_loc as parameters
+    :param python_call: string that calls a python function with data_loc and target_loc as
+    parameters
     :return: data_len: int length of 'data_loc =' call
     :return: data_call: str location of data
     :return: target_len: int length of 'target_loc =' call
@@ -25,22 +28,21 @@ def find_data_target(python_call):
     """
 
     data_len_span = re.search(r"data_loc[ ]*=[ ]*", python_call).span()
-    data_len = data_len_span[1] - data_len_span[0]
     data_loc_span = re.search("^.*?(?=[,|)])", python_call[data_len_span[1]:]).span()
     data_call = python_call[data_len_span[1]+1:data_len_span[1] + data_loc_span[1]-1]
 
     target_len_span = re.search(r"target_loc[ ]*=[ ]*", python_call).span()
-    target_len = target_len_span[1] - target_len_span[0]
     target_loc_span = re.search("^.*?(?=[,|)])", python_call[target_len_span[1]:]).span()
     target_call = python_call[target_len_span[1]+1:target_len_span[1] + target_loc_span[1]-1]
 
-    return data_len, data_call, target_len, target_call
+    return data_call, target_call
 
 
 def algo_runner(python_call, module_name):
     """
-    Calls an arbitrary module and runs the module with three different amounts of data for the purpose of
-    timing the module and predicting how long the module will take to run with entire data set.
+    Calls an arbitrary module and runs the module with three different amounts of data for the
+    purpose of timing the module and predicting how long the module will take to run with entire
+    data set.
 
     :param python_call: str python string calling the algorithm to be timed
     :param module_name: str name of module
@@ -52,7 +54,7 @@ def algo_runner(python_call, module_name):
     :return time_10: float time in seconds required to run algorithm with pct_examples_10
     """
 
-    data_len, data_call, target_len, target_call = find_data_target(python_call)
+    data_call, target_call = find_data_target(python_call)
 
     # Read data from
     data = pd.read_csv(data_call, index_col=0)
@@ -121,5 +123,6 @@ def algo_runner(python_call, module_name):
 
 
 if __name__ == '__main__':
-    algo_runner("run_mnist(data_loc='mnist_data/mnist_data_20k.csv', target_loc='mnist_data/mnist_target_20k.csv')",
-                'keras_mnist_3')
+    PY_STR = "run_mnist(data_loc='mnist_data/mnist_data_20k.csv', " \
+             "target_loc='mnist_data/mnist_target_20k.csv')"
+    algo_runner(PY_STR, 'keras_mnist_3')
