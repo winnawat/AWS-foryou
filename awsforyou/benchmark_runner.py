@@ -7,10 +7,7 @@ dataset. This script is used as a benchmark test for EC2 clusters.
 # benchmark_runner.run_benchmark()
 
 from datetime import datetime, timezone
-import numpy as np
-import os
 import pandas as pd
-import sys
 import time
 
 from cpuinfo import get_cpu_info
@@ -23,15 +20,17 @@ import psutil
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
-def write_scorecard(dict):
+def write_scorecard(results_dict):
     """
     Append the aws-scorecard using the dictionary input.
     """
-    results = pd.DataFrame([dict])
+    results = pd.DataFrame([results_dict])
     try:
         scorecard = pd.read_csv('./aws-scorecard.csv')
         scorecard = pd.concat([scorecard, results], sort=False)
         # print("csv exists")
+    except (KeyboardInterrupt, SystemExit):
+        raise
     except Exception:
         # print("csv does not exist")
         scorecard = results
@@ -47,20 +46,20 @@ def get_data():
     60k rows of training set.
     10k rows of test set.
     No input.
-    returns (X_train, y_train), (X_test, y_test)
+    returns (x_train, y_train), (x_test, y_test)
     """
     # the data, shuffled and split between tran and test sets
-    (X_train, y_train), (X_test, y_test) = mnist.load_data()
-    X_train = X_train.reshape(60000, 784)
-    X_test = X_test.reshape(10000, 784)
-    X_train = X_train.astype("float32") / 255
-    X_test = X_test.astype("float32") / 255
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    x_train = x_train.reshape(60000, 784)
+    x_test = x_test.reshape(10000, 784)
+    x_train = x_train.astype("float32") / 255
+    x_test = x_test.astype("float32") / 255
 
     # convert class vectors to binary class matrices
     y_train = np_utils.to_categorical(y_train)
     y_test = np_utils.to_categorical(y_test)
 
-    return (X_train, y_train), (X_test, y_test)
+    return (x_train, y_train), (x_test, y_test)
 
 
 def baseline_model(num_pixels, num_classes):
@@ -83,21 +82,21 @@ def baseline_model(num_pixels, num_classes):
     return model
 
 
-def run_full_mnist(X_train, y_train, X_test, y_test):
+def run_full_mnist(x_train, y_train, x_test, y_test):
     """
-    :param X_train: numpy array - training set features
+    :param x_train: numpy array - training set features
     :param y_train: numpy array - training set targets
-    :param X_test: numpy array - test set features
+    :param x_test: numpy array - test set features
     :param y_test: numpy array - test set targets
     :return: None
     """
     # build the model
-    num_pixels = X_train.shape[1]
+    num_pixels = x_train.shape[1]
     num_classes = y_test.shape[1]
     model = baseline_model(num_pixels, num_classes)
     # Fit the model
-    model.fit(X_train, y_train, epochs=10, batch_size=200, verbose=2,
-              validation_data=(X_test, y_test))
+    model.fit(x_train, y_train, epochs=10, batch_size=200, verbose=2,
+              validation_data=(x_test, y_test))
 
 
 def run_benchmark(aws=False):
@@ -119,7 +118,6 @@ def run_benchmark(aws=False):
     else:
         results['instancetype'] = 'local-machine'
         results['region'] = 'local-machine'
-        pass
 
     results['datetime'] = datetime \
         .now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
@@ -131,14 +129,14 @@ def run_benchmark(aws=False):
     results['RAM'] = int(round(mem.total/(1024*1024*1000), 0))
 
     # locate data here (temporary)
-    (X_train, y_train), (X_test, y_test) = get_data()
+    (x_train, y_train), (x_test, y_test) = get_data()
     # data = '../mnist_data/data_10.csv'
     # target = '../mnist_data/target_10.csv'
     # finish locating data
 
     # run and time mnist
     start = time.time()
-    run_full_mnist(X_train, y_train, X_test, y_test)
+    run_full_mnist(x_train, y_train, x_test, y_test)
     # keras_mnist_3.run_mnist(data, target)
     finish = time.time()
     runtime = finish - start
