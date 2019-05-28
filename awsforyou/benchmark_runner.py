@@ -36,7 +36,6 @@ def write_scorecard(results_dict):
 
     scorecard.set_index('datetime', inplace=True)
     scorecard.to_csv('./aws-scorecard.csv')
-    return None
 
 
 def get_data():
