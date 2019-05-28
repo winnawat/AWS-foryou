@@ -25,7 +25,7 @@ import psutil
 
 def write_scorecard(dict):
     """
-    Append the aws-scorecard using the string input.
+    Append the aws-scorecard using the dictionary input.
     """
     results = pd.DataFrame([dict])
     try:
@@ -42,6 +42,13 @@ def write_scorecard(dict):
 
 
 def get_data():
+    """
+    Script to download data from keras.datasets mnist.
+    60k rows of training set.
+    10k rows of test set.
+    No input.
+    returns (X_train, y_train), (X_test, y_test)
+    """
     # the data, shuffled and split between tran and test sets
     (X_train, y_train), (X_test, y_test) = mnist.load_data()
     X_train = X_train.reshape(60000, 784)
@@ -78,8 +85,10 @@ def baseline_model(num_pixels, num_classes):
 
 def run_full_mnist(X_train, y_train, X_test, y_test):
     """
-    :param X_train: location of training and test data
-    :param y_test: location of target
+    :param X_train: numpy array - training set features
+    :param y_train: numpy array - training set targets
+    :param X_test: numpy array - test set features
+    :param y_test: numpy array - test set targets
     :return: None
     """
     # build the model
@@ -93,9 +102,12 @@ def run_full_mnist(X_train, y_train, X_test, y_test):
 
 def run_benchmark(aws=False):
     """
-    Runs the benchmark (keras_mnist_3) on full data.
-    Append/generate results file called 'AWS-scorecard'
+    Runs the benchmark on full mnist data.
+    Append/generate results file called 'aws-scorecard'
     scorecard contains system information and runtime
+    :param aws=False: If set to True, the script will fetch
+    AWS instance information. This will throw an error if run on local machine.
+    returns runtime
     """
     results = {}
 

@@ -1,3 +1,14 @@
+"""
+Script that fetchs information realted to current AWS instance.
+instance type and region.
+returns dictionary
+{
+'instancetype': instancetype,
+'region': region
+}
+"""
+
+
 import requests
 
 
@@ -10,4 +21,4 @@ def get_instance():
     response_json = r.json()
     instancetype = response_json.get('instanceType')
     region = response_json.get('region')
-    return {'instancetype': instancetype, 'region': region, }
+    return {'instancetype': instancetype, 'region': region}
