@@ -6,7 +6,6 @@ dataset.  This script is used as a test for the AWS_foryou algo_runner component
 import importlib
 import os
 import re
-import sys
 import time
 import numpy as np
 import pandas as pd
@@ -38,6 +37,77 @@ def find_data_target(python_call):
     return data_call, target_call
 
 
+def select_data(data, target):
+    """
+    Splits data into three groups for timing purposes based on the size of the dataset.
+
+    :param data: pandas.DataFrame data for algorithm
+    :param target: pandas.DataFrame target for algorithm
+    :return pct_examples_1: percent of examples in the first iteration
+    :return pct_examples_2: percent of examples in the second iteration
+    :return pct_examples_3: percent of examples in the third iteration
+    """
+    data_plus_target = pd.concat([data, target], axis=1)
+    num_examples = data_plus_target.shape[0]
+
+    if num_examples >= 100000:
+        num_examples_1 = int(np.floor(num_examples * 0.01))
+        num_examples_2 = int(np.floor(num_examples * 0.02))
+        num_examples_3 = int(np.floor(num_examples * 0.03))
+
+    elif num_examples >= 10000:
+        num_examples_1 = int(np.floor(num_examples * 0.05))
+        num_examples_2 = int(np.floor(num_examples * 0.10))
+        num_examples_3 = int(np.floor(num_examples * 0.15))
+    else:
+        num_examples_1 = int(np.floor(num_examples * 0.1))
+        num_examples_2 = int(np.floor(num_examples * 0.2))
+        num_examples_3 = int(np.floor(num_examples * 0.3))
+
+    pct_examples_1 = num_examples_1 / num_examples
+    pct_examples_2 = num_examples_2 / num_examples
+    pct_examples_3 = num_examples_3 / num_examples
+
+    data_plus_target_1 = data_plus_target.sample(num_examples_1)
+    data_plus_target_2 = data_plus_target.sample(num_examples_2)
+    data_plus_target_3 = data_plus_target.sample(num_examples_3)
+
+    data_1 = data_plus_target_1.iloc[:, :data.shape[1]]
+    data_2 = data_plus_target_2.iloc[:, :data.shape[1]]
+    data_3 = data_plus_target_3.iloc[:, :data.shape[1]]
+
+    target_1 = data_plus_target_1.iloc[:, data.shape[1]:]
+    target_2 = data_plus_target_2.iloc[:, data.shape[1]:]
+    target_3 = data_plus_target_3.iloc[:, data.shape[1]:]
+
+    data_1.to_csv('data/data_1.csv')
+    data_2.to_csv('data/data_2.csv')
+    data_3.to_csv('data/data_3.csv')
+
+    target_1.to_csv('data/target_1.csv')
+    target_2.to_csv('data/target_2.csv')
+    target_3.to_csv('data/target_3.csv')
+
+    return pct_examples_1, pct_examples_2, pct_examples_3
+
+
+def time_algo(call_string, module_name):
+    """
+    Times the execution of a python call string.
+    :param call_string: str string that calls a python module and executes an algorithm
+    :return run_time: float time in seconds required to execute python call string
+    """
+
+    module = importlib.import_module(module_name)
+
+    start = time.time()
+    exec(call_string)
+    finish = time.time()
+    run_time = finish - start
+
+    return run_time
+
+
 def algo_runner(python_call, module_name):
     """
     Calls an arbitrary module and runs the module with three different amounts of data for the
@@ -46,80 +116,34 @@ def algo_runner(python_call, module_name):
 
     :param python_call: str python string calling the algorithm to be timed
     :param module_name: str name of module
-    :return pct_examples_01: float fraction of examples tested in first iteration
-    :return time_01: float: time in seconds required to run algorithm with pct_examples_01
-    :return pct_examples_05: float fraction of examples tested in second iteration
-    :return time_05: float time in seconds required to run algorithm with pct_examples_05
-    :return pct_examples_10: float fraction of examples tested in third iteration
-    :return time_10: float time in seconds required to run algorithm with pct_examples_10
+    :return pct_examples_1: float fraction of examples tested in first iteration
+    :return time_1: float: time in seconds required to run algorithm with pct_examples_1
+    :return pct_examples_2: float fraction of examples tested in second iteration
+    :return time_2: float time in seconds required to run algorithm with pct_examples_2
+    :return pct_examples_3: float fraction of examples tested in third iteration
+    :return time_3: float time in seconds required to run algorithm with pct_examples_3
     """
 
     data_call, target_call = find_data_target(python_call)
 
-    # Read data from
+    #PROBLEM: WHAT IF DATA IS NOT IN CSV FORM?
     data = pd.read_csv(data_call, index_col=0)
     target = pd.read_csv(target_call, index_col=0)
 
-    data_plus_target = pd.concat([data, target], axis=1)
+    pct_examples_1, pct_examples_2, pct_examples_3 = select_data(data, target)
 
-    num_examples = data.shape[0]
+    string_1 = 'module.' + python_call.replace(data_call, 'data/data_1.csv')\
+        .replace(target_call, 'data/target_1.csv')
+    string_2 = 'module.' + python_call.replace(data_call, 'data/data_2.csv')\
+        .replace(target_call, 'data/target_2.csv')
+    string_3 = 'module.' + python_call.replace(data_call, 'data/data_3.csv')\
+        .replace(target_call, 'data/target_3.csv')
 
-    num_examples_01 = int(np.floor(num_examples * 0.01))
-    num_examples_05 = int(np.floor(num_examples * 0.05))
-    num_examples_10 = int(np.floor(num_examples * 0.10))
+    time_1 = time_algo(string_1, module_name)
+    time_2 = time_algo(string_2, module_name)
+    time_3 = time_algo(string_3, module_name)
 
-    pct_examples_01 = num_examples_01 / num_examples
-    pct_examples_05 = num_examples_05 / num_examples
-    pct_examples_10 = num_examples_10 / num_examples
-
-    data_plus_target_01 = data_plus_target.sample(num_examples_01)
-    data_plus_target_05 = data_plus_target.sample(num_examples_05)
-    data_plus_target_10 = data_plus_target.sample(num_examples_10)
-
-    data_01 = data_plus_target_01.iloc[:, :data.shape[1]]
-    data_05 = data_plus_target_05.iloc[:, :data.shape[1]]
-    data_10 = data_plus_target_10.iloc[:, :data.shape[1]]
-
-    target_01 = data_plus_target_01.iloc[:, data.shape[1]:]
-    target_05 = data_plus_target_05.iloc[:, data.shape[1]:]
-    target_10 = data_plus_target_10.iloc[:, data.shape[1]:]
-
-    data_01.to_csv('data/data_01.csv')
-    data_05.to_csv('data/data_05.csv')
-    data_10.to_csv('data/data_10.csv')
-
-    target_01.to_csv('data/target_01.csv')
-    target_05.to_csv('data/target_05.csv')
-    target_10.to_csv('data/target_10.csv')
-
-    module = importlib.import_module(module_name)
-
-    string_01 = 'module.' + python_call.replace(data_call, 'data/data_01.csv')\
-        .replace(target_call, 'data/target_01.csv')
-    string_05 = 'module.' + python_call.replace(data_call, 'data/data_05.csv')\
-        .replace(target_call, 'data/target_05.csv')
-    string_10 = 'module.' + python_call.replace(data_call, 'data/data_10.csv')\
-        .replace(target_call, 'data/target_10.csv')
-
-    start = time.time()
-    exec(string_01)
-    finish = time.time()
-
-    time_01 = finish - start
-
-    start = time.time()
-    exec(string_05)
-    finish = time.time()
-
-    time_05 = finish-start
-
-    start = time.time()
-    exec(string_10)
-    finish = time.time()
-
-    time_10 = finish-start
-
-    return pct_examples_01, time_01, pct_examples_05, time_05, pct_examples_10, time_10
+    return pct_examples_1, time_1, pct_examples_2, time_2, pct_examples_3, time_3
 
 
 if __name__ == '__main__':

@@ -1,8 +1,11 @@
+"""
+Module that runs a simple perceptron on MNIST dataset.
+"""
+
 import numpy as np
 import pandas as pd
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import Dropout
 from keras.utils import np_utils
 
 # define baseline model
@@ -15,7 +18,8 @@ def baseline_model(num_pixels, num_classes):
 
     # create model
     model = Sequential()
-    model.add(Dense(num_pixels, input_dim=num_pixels, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(num_pixels, input_dim=num_pixels, kernel_initializer='normal',
+                    activation='relu'))
     model.add(Dense(num_classes, kernel_initializer='normal', activation='softmax'))
     # Compile model
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -60,11 +64,9 @@ def run_mnist(data_loc, target_loc):
 
     # build the model
     model = baseline_model(num_pixels, num_classes)
-    # Fit the model
-    
-    model.fit(X_train, y_train, epochs=10, batch_size=200, verbose=2, validation_data=(X_test, y_test))
-    # Final evaluation of the model
-    # scores = model.evaluate(X_test, y_test, verbose=0)
-    # print("Baseline Error: %.2f%%" % (100-scores[1]*100))
 
-    return (None)
+    # Fit the model
+    model.fit(X_train, y_train, epochs=10, batch_size=200, verbose=2,
+              validation_data=(X_test, y_test))
+
+    return None
