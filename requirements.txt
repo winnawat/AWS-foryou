@@ -1,1 +1,7 @@
 pandas
+
+py-cpuinfo
+
+keras
+
+tensorflow
