@@ -1,7 +1,8 @@
-import os
-import unittest
+"""
+Unittests for benchmark_runner.py
+"""
 
-import pandas as pd
+import unittest
 
 import benchmark_runner as bench
 
