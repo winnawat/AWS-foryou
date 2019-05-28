@@ -7,9 +7,9 @@ dataset. This script is used as a benchmark test for EC2 clusters.
 # benchmark_runner.run_benchmark()
 
 from datetime import datetime, timezone
-import pandas as pd
 import time
 
+import pandas as pd
 from cpuinfo import get_cpu_info
 from keras.datasets import mnist
 from keras.layers import Dense
@@ -24,13 +24,12 @@ def write_scorecard(results_dict):
     """
     Append the aws-scorecard using the dictionary input.
     """
+    # pylint: disable=broad-except
     results = pd.DataFrame([results_dict])
     try:
         scorecard = pd.read_csv('./aws-scorecard.csv')
         scorecard = pd.concat([scorecard, results], sort=False)
         # print("csv exists")
-    except (KeyboardInterrupt, SystemExit):
-        raise
     except Exception:
         # print("csv does not exist")
         scorecard = results
