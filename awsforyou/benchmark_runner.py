@@ -57,7 +57,7 @@ def get_data():
     y_train = np_utils.to_categorical(y_train)
     y_test = np_utils.to_categorical(y_test)
 
-    return (x_train, y_train), (x_test, y_test)
+    return x_train, y_train, x_test, y_test
 
 
 def baseline_model(num_pixels, num_classes):
@@ -127,7 +127,7 @@ def run_benchmark(aws=False):
     results['RAM'] = int(round(mem.total/(1024*1024*1000), 0))
 
     # locate data here (temporary)
-    (x_train, y_train), (x_test, y_test) = get_data()
+    x_train, y_train, x_test, y_test = get_data()
     # data = '../mnist_data/data_10.csv'
     # target = '../mnist_data/target_10.csv'
     # finish locating data
