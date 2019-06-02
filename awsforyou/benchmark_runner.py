@@ -3,9 +3,6 @@ Script that trains a simply perceptron using the keras library on the MNIST
 dataset. This script is used as a benchmark test for EC2 clusters.
 """
 
-# import benchmark_runner
-# benchmark_runner.run_benchmark()
-
 from datetime import datetime, timezone
 import time
 
@@ -17,8 +14,6 @@ from keras.models import Sequential
 from keras.utils import np_utils
 import psutil
 
-# os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
 
 def write_scorecard(results_dict):
     """
@@ -29,9 +24,7 @@ def write_scorecard(results_dict):
     try:
         scorecard = pd.read_csv('./aws-scorecard.csv')
         scorecard = pd.concat([scorecard, results], sort=False)
-        # print("csv exists")
     except Exception:
-        # print("csv does not exist")
         scorecard = results
 
     scorecard.set_index('datetime', inplace=True)
@@ -46,7 +39,6 @@ def get_data():
     No input.
     returns (x_train, y_train), (x_test, y_test)
     """
-    # the data, shuffled and split between tran and test sets
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
     x_train = x_train.reshape(60000, 784)
     x_test = x_test.reshape(10000, 784)
@@ -57,7 +49,7 @@ def get_data():
     y_train = np_utils.to_categorical(y_train)
     y_test = np_utils.to_categorical(y_test)
 
-    return (x_train, y_train), (x_test, y_test)
+    return x_train, y_train, x_test, y_test
 
 
 def baseline_model(num_pixels, num_classes):
@@ -126,16 +118,12 @@ def run_benchmark(aws=False):
     mem = psutil.virtual_memory()
     results['RAM'] = int(round(mem.total/(1024*1024*1000), 0))
 
-    # locate data here (temporary)
-    (x_train, y_train), (x_test, y_test) = get_data()
-    # data = '../mnist_data/data_10.csv'
-    # target = '../mnist_data/target_10.csv'
-    # finish locating data
+    # getting data
+    x_train, y_train, x_test, y_test = get_data()
 
     # run and time mnist
     start = time.time()
     run_full_mnist(x_train, y_train, x_test, y_test)
-    # keras_mnist_3.run_mnist(data, target)
     finish = time.time()
     runtime = finish - start
     results['runtime'] = runtime
