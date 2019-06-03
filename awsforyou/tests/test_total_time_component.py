@@ -22,22 +22,19 @@ class TestPermits(unittest.TestCase):
         test for linear time
         """
         calc_linear = int(total_time_component.find_total_time(TIMES_LINEAR))
-        assert calc_linear == EXPT_TIME_LINEAR
+        self.assertEqual(calc_linear, EXPT_TIME_LINEAR)
 
     def test_for_squared(self):
         """
         test for n^2 time
         """
         calc_sqrd = int(total_time_component.find_total_time(TIMES_SQRD))
-        assert calc_sqrd == EXPT_TIME_SQRD
+        self.assertEqual(calc_sqrd, EXPT_TIME_SQRD)
 
     def test_for_log(self):
         """
         test for log time
         """
         calc_log = int(total_time_component.find_total_time(TIMES_LOG))
-        assert EXPT_TIME_LOG_RANGE[1] > calc_log > EXPT_TIME_LOG_RANGE[0]
-
-
-SUITE = unittest.TestLoader().loadTestsFromTestCase(TestPermits)
-_ = unittest.TextTestRunner().run(SUITE)
+        self.assertGreater(EXPT_TIME_LOG_RANGE[1], calc_log)
+        self.assertLess(EXPT_TIME_LOG_RANGE[0], calc_log)
