@@ -1,16 +1,15 @@
 """this module contains three tests for the total time component"""
 import unittest
-import total_time_component
 import numpy as np
-import pandas as pd
+from awsforyou import total_time_component
 
-times_linear = np.array([1, 5, 10])
-times_sqrd = np.array([1, 25, 100])
-times_log = np.array([1, 8, 11])
+TIMES_LINEAR = np.array([1, 5, 10])
+TIMES_SQRD = np.array([1, 25, 100])
+TIMES_LOG = np.array([1, 8, 11])
 
-expected_time_linear = 100
-expected_time_sqrd = 10000
-expected_time_log_range = [20, 22]
+EXPT_TIME_LINEAR = 100
+EXPT_TIME_SQRD = 10000
+EXPT_TIME_LOG_RANGE = [20, 22]
 
 
 class TestPermits(unittest.TestCase):
@@ -22,26 +21,20 @@ class TestPermits(unittest.TestCase):
         """
         test for linear time
         """
-        calc_linear = int(total_time_component.find_total_time(times_linear))
-        TorF = calc_linear == expected_time_linear
-        assert TorF
+        calc_linear = int(total_time_component.find_total_time(TIMES_LINEAR))
+        self.assertEqual(calc_linear, EXPT_TIME_LINEAR)
 
     def test_for_squared(self):
         """
         test for n^2 time
         """
-        calc_sqrd = int(total_time_component.find_total_time(times_sqrd))
-        TorF = calc_sqrd == expected_time_sqrd
-        assert TorF
+        calc_sqrd = int(total_time_component.find_total_time(TIMES_SQRD))
+        self.assertEqual(calc_sqrd, EXPT_TIME_SQRD)
 
     def test_for_log(self):
         """
         test for log time
         """
-        calc_log = int(total_time_component.find_total_time(times_log))
-        TorF = calc_log < expected_time_log_range[1] and calc_log > expected_time_log_range[0]
-        assert TorF
-
-
-SUITE = unittest.TestLoader().loadTestsFromTestCase(TestPermits)
-_ = unittest.TextTestRunner().run(SUITE)
+        calc_log = int(total_time_component.find_total_time(TIMES_LOG))
+        self.assertGreater(EXPT_TIME_LOG_RANGE[1], calc_log)
+        self.assertLess(EXPT_TIME_LOG_RANGE[0], calc_log)
