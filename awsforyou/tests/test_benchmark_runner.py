@@ -3,8 +3,9 @@ Unittests for benchmark_runner.py
 """
 
 import unittest
+import pandas as pd
 
-import benchmark_runner as bench
+from awsforyou import benchmark_runner as bench
 
 
 class TestGetData(unittest.TestCase):
@@ -33,3 +34,49 @@ class TestRunBenchmark(unittest.TestCase):
         """
         runtime = bench.run_benchmark(aws=False)
         self.assertIsInstance(runtime, float)
+
+
+class TestWriteScorecard(unittest.TestCase):
+    """
+    Test cases for write_scorecard
+    """
+    def test_writescorecard(self):
+        """
+        Check the functionality of write_scorecard
+        """
+        gold_dict = {
+            'datetime': '2019-06-03 22:13:45',
+            'RAM': 8,
+            'arch': 'X86_64',
+            'bits': 64,
+            'brand': 'Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz',
+            'count': 8,
+            'cpuinfo_version': '[5, 0, 0]',
+            'extended_model': 8,
+            'family': 6,
+            'flags': "['some', 'flag', 'here']",
+            'hz_actual': '1.8000 GHz',
+            'hz_actual_raw': '[1800000000, 0]',
+            'hz_advertised': '1.6000 GHz',
+            'hz_advertised_raw': '[1600000000, 0]',
+            'instancetype': 'local-machine',
+            'l2_cache_associativity': '0x100',
+            'l2_cache_line_size': 6,
+            'l2_cache_size': 64,
+            'l3_cache_size': '256 KB',
+            'model': 142,
+            'python_version': '3.6.7.final.0 (64 bit)',
+            'raw_arch_string': 'x86_64',
+            'region': 'local-machine',
+            'runtime': 40.49512386322022,
+            'stepping': 10,
+            'timezone': 'UTC',
+            'vendor_id': 'GenuineIntel'
+            }
+        existing_csv = pd.DataFrame([gold_dict])
+        existing_csv.set_index('datetime', inplace=True)
+        existing_csv.to_csv('./aws-scorecard.csv')
+        bench.write_scorecard(gold_dict)
+        scorecard = pd.read_csv('./aws-scorecard.csv')
+        dict_scorecard = scorecard.to_dict(orient='records')
+        self.assertEqual([gold_dict, gold_dict], dict_scorecard)
