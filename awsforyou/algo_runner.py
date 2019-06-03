@@ -23,10 +23,12 @@ def find_data_target(python_call):
     """
 
     data_len_span = re.search(r"data_loc[ ]*=[ ]*", python_call).span()
+    #re search for comma or end paren [,|)]
     data_loc_span = re.search("^.*?(?=[,|)])", python_call[data_len_span[1]:]).span()
     data_call = python_call[data_len_span[1]+1:data_len_span[1] + data_loc_span[1]-1]
 
     target_len_span = re.search(r"target_loc[ ]*=[ ]*", python_call).span()
+    # re search for comma or end paren [,|)]
     target_loc_span = re.search("^.*?(?=[,|)])", python_call[target_len_span[1]:]).span()
     target_call = python_call[target_len_span[1]+1:target_len_span[1] + target_loc_span[1]-1]
 
@@ -140,9 +142,3 @@ def algo_runner(python_call, module_name):
     time_3 = time_algo(string_3, module_name)
 
     return pct_examples_1, time_1, pct_examples_2, time_2, pct_examples_3, time_3
-
-
-if __name__ == '__main__':
-    PY_STR = "run_mnist(data_loc='mnist_data/mnist_data_20k.csv', " \
-             "target_loc='mnist_data/mnist_target_20k.csv')"
-    algo_runner(PY_STR, 'keras_mnist_3')
