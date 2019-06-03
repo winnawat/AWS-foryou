@@ -13,6 +13,7 @@ import pandas as pd
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+
 def find_data_target(python_call):
     """
     Finds the location of 'data_loc = ' and 'target_loc = ' in python_call.  Helper function for
@@ -126,7 +127,7 @@ def algo_runner(python_call, module_name):
 
     data_call, target_call = find_data_target(python_call)
 
-    #PROBLEM: WHAT IF DATA IS NOT IN CSV FORM?
+    # PROBLEM: WHAT IF DATA IS NOT IN CSV FORM?
     data = pd.read_csv(data_call, index_col=0)
     target = pd.read_csv(target_call, index_col=0)
 
