@@ -8,7 +8,7 @@ warnings.filterwarnings('ignore')
 
 def func_log(data, a_factor, y_int):
     """A logarithmic function with y-intercept equal to zero"""
-    return = a_factor * np.log(data) + y_int
+    return a_factor * np.log(data) + y_int
 
 
 def func_sqrd(data, a_factor, y_int):
