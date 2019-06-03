@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 certifi==2019.3.9
 mkl-fft==1.0.12
 mkl-random==1.0.2
@@ -6,3 +7,14 @@ pandas==0.24.2
 python-dateutil==2.8.0
 pytz==2019.1
 six==1.12.0
+=======
+pandas
+
+py-cpuinfo
+
+keras
+
+tensorflow
+
+psutil
+>>>>>>> 18a52ffd514f9e31513d154ad4282eb2a6ecf180
