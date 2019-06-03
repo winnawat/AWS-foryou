@@ -1,5 +1,4 @@
 """this module is the total time estimation component"""
-import copy
 import unittest
 import warnings
 import matplotlib.pyplot as plt
@@ -9,21 +8,21 @@ from scipy.optimize import curve_fit
 warnings.filterwarnings('ignore')
 
 
-def func_log(x, a):
+def func_log(x, a, b):
     """A logarithmic function with y-intercept equal to zero"""
-    y = a*np.log(x)
+    y = a*np.log(x)+b
     return y
 
 
-def func_sqrd(x, a):
+def func_sqrd(x, a, b):
     """A squaring function with y-intercept equal to zero"""
-    y = a*np.power(x, 2)
+    y = a*np.power(x, 2)+b
     return y
 
 
-def func_linear(x, a):
+def func_linear(x, a, b):
     """A linear function with y-intercept equal to zero"""
-    y = a*x
+    y = a*x+b
     return y
 
 
@@ -32,22 +31,28 @@ def find_total_time(times, row_percents=[1, 5, 10]):
     calculate those times, this function will estimate the time required to \
     run the entire data set."""
     popt_linear, pcov_linear = curve_fit(func_linear,  row_percents, times)
-    resid_linear = np.linalg.norm(times-func_linear(row_percents, popt_linear))
+    a_linear = popt_linear[0].flatten()
+    b_linear = popt_linear[1].flatten()
+    resid_linear = np.linalg.norm(times-func_linear(row_percents, a_linear, b_linear))
+
     popt_sqrd, pcov_sqrd = curve_fit(func_sqrd,  row_percents,  times)
-    resid_sqrd = np.linalg.norm(times-func_sqrd(row_percents, popt_sqrd))
+    a_sqrd = popt_sqrd[0].flatten()
+    b_sqrd = popt_sqrd[1].flatten()
+    resid_sqrd = np.linalg.norm(times-func_sqrd(row_percents, a_sqrd, b_sqrd))
+
     popt_log, pcov_log = curve_fit(func_log,  row_percents,  times)
-    resid_log = np.linalg.norm(times-func_log(row_percents, popt_log))
+    a_log = popt_log[0].flatten()
+    b_log = popt_log[1].flatten()
+    resid_log = np.linalg.norm(times-func_log(row_percents, a_log, b_log))
+
     total_time = -1
     best_fit = np.min([resid_linear, resid_sqrd, resid_log])
 
     if best_fit == resid_linear:
-        x_shape_param = popt_linear[0]
-        total_time = func_linear(100, x_shape_param)
+        total_time = func_linear(100, a_linear, b_linear)
     elif best_fit == resid_sqrd:
-        x_shape_param = popt_sqrd[0]
-        total_time = func_sqrd(100, x_shape_param)
+        total_time = func_sqrd(100, a_sqrd, b_sqrd)
     else:
-        x_shape_param = popt_log[0]
-        total_time = func_log(100, x_shape_param)
+        total_time = func_log(100, a_log, b_log)
 
     return total_time
