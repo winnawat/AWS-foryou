@@ -85,7 +85,7 @@ def run_full_mnist(x_train, y_train, x_test, y_test):
     num_classes = y_test.shape[1]
     model = baseline_model(num_pixels, num_classes)
     # Fit the model
-    model.fit(x_train, y_train, epochs=10, batch_size=200, verbose=2,
+    model.fit(x_train, y_train, epochs=10, batch_size=200, verbose=0,
               validation_data=(x_test, y_test))
 
 
@@ -127,7 +127,9 @@ def run_benchmark(aws=False):
     finish = time.time()
     runtime = finish - start
     results['runtime'] = runtime
-    write_scorecard(results)
+
+    if aws is True:
+        write_scorecard(results)
 
     print("mnist runtime: %f " % runtime)
     return runtime
