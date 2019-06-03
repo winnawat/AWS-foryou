@@ -101,7 +101,7 @@ def run_benchmark(aws=False):
     results = {}
 
     if aws is True:
-        import get_aws_instance
+        from awsforyou import get_aws_instance
         instancetype_region = get_aws_instance.get_instance()
         results['instancetype'] = instancetype_region['instancetype']
         results['region'] = instancetype_region['region']
@@ -127,7 +127,9 @@ def run_benchmark(aws=False):
     finish = time.time()
     runtime = finish - start
     results['runtime'] = runtime
-    write_scorecard(results)
+
+    if aws is True:
+        write_scorecard(results)
 
     print("mnist runtime: %f " % runtime)
     return runtime
