@@ -101,7 +101,7 @@ def run_benchmark(aws=False):
     results = {}
 
     if aws is True:
-        import get_aws_instance
+        from awsforyou import get_aws_instance
         instancetype_region = get_aws_instance.get_instance()
         results['instancetype'] = instancetype_region['instancetype']
         results['region'] = instancetype_region['region']
