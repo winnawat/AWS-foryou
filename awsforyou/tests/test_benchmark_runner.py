@@ -4,7 +4,7 @@ Unittests for benchmark_runner.py
 
 import unittest
 
-import benchmark_runner as bench
+import awsforyou.benchmark_runner as bench
 
 
 class TestGetData(unittest.TestCase):
