@@ -1,7 +1,7 @@
 """this module contains three tests for the total time component"""
 import unittest
-from awsforyou import total_time_component
 import numpy as np
+from awsforyou import total_time_component
 
 TIMES_LINEAR = np.array([1, 5, 10])
 TIMES_SQRD = np.array([1, 25, 100])
