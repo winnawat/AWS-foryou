@@ -3,13 +3,13 @@ import unittest
 from awsforyou import total_time_component
 import numpy as np
 
-times_linear = np.array([1, 5, 10])
-times_sqrd = np.array([1, 25, 100])
-times_log = np.array([1, 8, 11])
+TIMES_LINEAR = np.array([1, 5, 10])
+TIMES_SQRD = np.array([1, 25, 100])
+TIMES_LOG = np.array([1, 8, 11])
 
-expected_time_linear = 100
-expected_time_sqrd = 10000
-expt_time_log_range = [20, 22]
+EXPT_TIME_LINEAR = 100
+EXPT_TIME_SQRD = 10000
+EXPT_TIME_LOG_RANGE = [20, 22]
 
 
 class TestPermits(unittest.TestCase):
@@ -21,24 +21,22 @@ class TestPermits(unittest.TestCase):
         """
         test for linear time
         """
-        calc_linear = int(total_time_component.find_total_time(times_linear))
-        TorF = calc_linear == expected_time_linear
-        assert TorF
+        calc_linear = int(total_time_component.find_total_time(TIMES_LINEAR))
+        assert calc_linear == EXPT_TIME_LINEAR
 
     def test_for_squared(self):
         """
         test for n^2 time
         """
-        calc_sqrd = int(total_time_component.find_total_time(times_sqrd))
-        TorF = calc_sqrd == expected_time_sqrd
-        assert TorF
+        calc_sqrd = int(total_time_component.find_total_time(TIMES_SQRD))
+        assert calc_sqrd == EXPT_TIME_SQRD
 
     def test_for_log(self):
         """
         test for log time
         """
-        calc_log = int(total_time_component.find_total_time(times_log))
-        assert expt_time_log_range[1] > calc_log > expt_time_log_range[0]
+        calc_log = int(total_time_component.find_total_time(TIMES_LOG))
+        assert EXPT_TIME_LOG_RANGE[1] > calc_log > EXPT_TIME_LOG_RANGE[0]
 
 
 SUITE = unittest.TestLoader().loadTestsFromTestCase(TestPermits)
