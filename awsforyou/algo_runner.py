@@ -102,6 +102,7 @@ def time_algo(call_string, module_name):
     Times the execution of a python call string.
     :param call_string: str string that calls a python module and executes an
     algorithm
+    :param module_name: str name of module from which function is called
     :return run_time: float time in seconds required to execute python call
     string
     """
@@ -123,7 +124,7 @@ def algo_runner(python_call, module_name):
     module will take to run with entire data set.
 
     :param python_call: str python string calling the algorithm to be timed
-    :param module_name: str name of module
+    :param module_name: name of module from which function is called
     :return times:
     :return percents:
     """
