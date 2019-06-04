@@ -16,7 +16,7 @@ def get_all_regions():
     Get all regions served by AWS
     :return: a list of string
     """
-    ec2 = boto3.client('ec2')
+    ec2 = boto3.client('ec2', 'us-east-1')
     response = ec2.describe_regions()
     return [region['RegionName'] for region in response['Regions']]
 
