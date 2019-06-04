@@ -2,14 +2,12 @@
 Module that runs a simple perceptron on MNIST dataset.
 """
 
-import os
 import numpy as np
 import pandas as pd
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.utils import np_utils
 
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 def baseline_model(num_pixels, num_classes):
     """
