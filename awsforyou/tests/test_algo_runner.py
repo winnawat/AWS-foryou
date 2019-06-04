@@ -2,6 +2,7 @@
 Module that runs a simple perceptron on MNIST dataset.
 """
 
+import os
 import unittest
 import numpy as np
 import pandas as pd
@@ -111,9 +112,16 @@ class TestAlgoRunner(unittest.TestCase):
         :return: None
         """
 
-        run_string = "run_mnist(data_loc='data/mnist_data/" \
-                     "mnist_data_20k.csv', target_loc='data/mnist_data/" \
-                     "mnist_target_20k.csv')"
+        THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        data_path = os.path.join(THIS_DIR, "data/mnist_data/"
+                                           "mnist_data_20k.csv")
+        target_path = os.path.join(THIS_DIR, "data/mnist_data/"
+                                             "mnist_target_20k.csv")
+
+        run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
+                     + target_path + "')"
+
         times, percents = algo_runner.algo_runner(run_string, 'keras_mnist')
 
         self.assertTrue(isinstance(times, list))
