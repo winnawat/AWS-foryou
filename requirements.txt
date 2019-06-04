@@ -9,3 +9,5 @@ tensorflow
 psutil
 
 scipy
+
+sklearn
