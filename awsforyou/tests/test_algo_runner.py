@@ -5,6 +5,8 @@ Module that runs a simple perceptron on MNIST dataset.
 import unittest
 import numpy as np
 import pandas as pd
+from keras.utils import np_utils
+from keras.datasets import mnist
 from sklearn.datasets import load_iris
 from sklearn.datasets import fetch_covtype
 from awsforyou import algo_runner
@@ -21,26 +23,27 @@ class TestAlgoRunner(unittest.TestCase):
         test_str = "run_mnist(data_loc='mnist_data/mnist_data_20k.csv', " \
                    "target_loc='mnist_data/mnist_target_20k.csv')"
         data, target = algo_runner.find_data_target(test_str)
-        self.assertTrue(data == "mnist_data/mnist_data_20k.csv")
-        self.assertTrue(target == "mnist_data/mnist_target_20k.csv")
+
+        self.assertEqual(data, "mnist_data/mnist_data_20k.csv")
+        self.assertEqual(target, "mnist_data/mnist_target_20k.csv")
 
         test_str = "run_mnist(target_loc='mnist_data/mnist_target_20k.csv'," \
                    "data_loc='mnist_data/mnist_data_20k.csv')"
         data, target = algo_runner.find_data_target(test_str)
-        self.assertTrue(data == "mnist_data/mnist_data_20k.csv")
-        self.assertTrue(target == "mnist_data/mnist_target_20k.csv")
+        self.assertEqual(data, "mnist_data/mnist_data_20k.csv")
+        self.assertEqual(target, "mnist_data/mnist_target_20k.csv")
 
         test_str = "run_mnist(data_loc = 'mnist_data/mnist_data_20k.csv', " \
                    "target_loc = 'mnist_data/mnist_target_20k.csv')"
         data, target = algo_runner.find_data_target(test_str)
-        self.assertTrue(data == "mnist_data/mnist_data_20k.csv")
-        self.assertTrue(target == "mnist_data/mnist_target_20k.csv")
+        self.assertEqual(data, "mnist_data/mnist_data_20k.csv")
+        self.assertEqual(target, "mnist_data/mnist_target_20k.csv")
 
         test_str = 'run_mnist(data_loc = "mnist_data/mnist_data_20k.csv", ' \
                    'target_loc = "mnist_data/mnist_target_20k.csv")'
         data, target = algo_runner.find_data_target(test_str)
-        self.assertTrue(data == "mnist_data/mnist_data_20k.csv")
-        self.assertTrue(target == "mnist_data/mnist_target_20k.csv")
+        self.assertEqual(data, "mnist_data/mnist_data_20k.csv")
+        self.assertEqual(target, "mnist_data/mnist_target_20k.csv")
 
         return None
 
@@ -58,16 +61,24 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.DataFrame(target)
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(data, target)
-        self.assertTrue(np.isclose(pct_examples_1, 0.1, rtol=0.001,
-                                   atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_2, 0.2, rtol=0.001,
-                                   atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_3, 0.3, rtol=0.001,
-                                   atol=0.001))
+        self.assertTrue(np.isclose(pct_examples_1, 0.1, rtol=0.01,
+                                   atol=0.01))
+        self.assertTrue(np.isclose(pct_examples_2, 0.2, rtol=0.01,
+                                   atol=0.01))
+        self.assertTrue(np.isclose(pct_examples_3, 0.3, rtol=0.01,
+                                   atol=0.01))
 
         # case greater than 10000 less than 100000 rows:
-        x_train = pd.read_csv('data/mnist_data/mnist_data_20k.csv')
-        y_train = pd.read_csv('data/mnist_data/mnist_target_20k.csv')
+        (x_train, y_train), (x_test, y_test) = mnist.load_data()
+        num_pixels = x_train.shape[1] * x_train.shape[2]
+        x_train = x_train.reshape(x_train.shape[0], num_pixels).astype(
+            'float32')
+        x_train = x_train / 255
+        y_train = np_utils.to_categorical(y_train)
+
+        x_train = pd.DataFrame(x_train)
+        y_train = pd.DataFrame(y_train)
+
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(x_train, y_train)
         self.assertTrue(np.isclose(pct_examples_1, 0.05, rtol=0.001,
@@ -85,6 +96,7 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.DataFrame(target)
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(data, target)
+
         self.assertTrue(np.isclose(pct_examples_1, 0.01, rtol=0.001,
                                    atol=0.001))
         self.assertTrue(np.isclose(pct_examples_2, 0.02, rtol=0.001,
