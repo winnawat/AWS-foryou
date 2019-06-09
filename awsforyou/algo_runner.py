@@ -43,7 +43,7 @@ def find_data_target(python_call):
     return data_call, target_call
 
 
-def select_data(data, target, num_pts):
+def select_data(data, target, num_pts=3):
     """
     Splits data into three groups for estimation of time taken to run whole
     100% of data set and order estimation.
