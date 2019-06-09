@@ -9,6 +9,8 @@ import re
 import time
 import numpy as np
 import pandas as pd
+import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def find_data_target(python_call):
@@ -41,13 +43,14 @@ def find_data_target(python_call):
     return data_call, target_call
 
 
-def select_data(data, target):
+def select_data(data, target, num_pts=3):
     """
-    Splits data into three groups for timing purposes based on the size of the
-    dataset.
+    Splits data into three groups for estimation of time taken to run whole
+    100% of data set and order estimation.
 
     :param data: pandas.DataFrame data for algorithm
     :param target: pandas.DataFrame target for algorithm
+    :param num_pts: number of independent points to be used for estimation
     :return pct_examples_1: percent of examples in the first iteration
     :return pct_examples_2: percent of examples in the second iteration
     :return pct_examples_3: percent of examples in the third iteration
@@ -56,45 +59,26 @@ def select_data(data, target):
     data_plus_target = pd.concat([data, target], axis=1)
     num_examples = data_plus_target.shape[0]
 
-    if num_examples >= 100000:
-        num_examples_1 = int(np.floor(num_examples * 0.01))
-        num_examples_2 = int(np.floor(num_examples * 0.02))
-        num_examples_3 = int(np.floor(num_examples * 0.03))
+    pct_examples_list = list(np.multiply(0.01, range(1, num_pts+1)))
 
-    elif num_examples >= 10000:
-        num_examples_1 = int(np.floor(num_examples * 0.05))
-        num_examples_2 = int(np.floor(num_examples * 0.10))
-        num_examples_3 = int(np.floor(num_examples * 0.15))
-    else:
-        num_examples_1 = int(np.floor(num_examples * 0.1))
-        num_examples_2 = int(np.floor(num_examples * 0.2))
-        num_examples_3 = int(np.floor(num_examples * 0.3))
+    num_examples_list = []
+    for pct_examples in pct_examples_list:
+        num_examples_list.append(int(np.ceil(pct_examples * num_examples)))
 
-    pct_examples_1 = num_examples_1 / num_examples
-    pct_examples_2 = num_examples_2 / num_examples
-    pct_examples_3 = num_examples_3 / num_examples
+    data_plus_target.head(1).iloc[:, :data.shape[1]].to_csv('data/data_0.csv')
+    data_plus_target.head(1).iloc[:, data.shape[1]:].to_csv(
+        'data/target_0.csv')
 
-    data_plus_target_1 = data_plus_target.sample(num_examples_1)
-    data_plus_target_2 = data_plus_target.sample(num_examples_2)
-    data_plus_target_3 = data_plus_target.sample(num_examples_3)
+    iter_ = 1
+    for num_examp in num_examples_list:
+        data_plus_target_1 = data_plus_target.sample(num_examp)
+        data_plus_target_1.iloc[:, :data.shape[1]].to_csv('data/data_' +
+                                                          str(iter_) + '.csv')
+        data_plus_target_1.iloc[:, data.shape[1]:].to_csv('data/target_' +
+                                                          str(iter_) + '.csv')
+        iter_ += 1
 
-    data_1 = data_plus_target_1.iloc[:, :data.shape[1]]
-    data_2 = data_plus_target_2.iloc[:, :data.shape[1]]
-    data_3 = data_plus_target_3.iloc[:, :data.shape[1]]
-
-    target_1 = data_plus_target_1.iloc[:, data.shape[1]:]
-    target_2 = data_plus_target_2.iloc[:, data.shape[1]:]
-    target_3 = data_plus_target_3.iloc[:, data.shape[1]:]
-
-    data_1.to_csv('data/data_1.csv')
-    data_2.to_csv('data/data_2.csv')
-    data_3.to_csv('data/data_3.csv')
-
-    target_1.to_csv('data/target_1.csv')
-    target_2.to_csv('data/target_2.csv')
-    target_3.to_csv('data/target_3.csv')
-
-    return pct_examples_1, pct_examples_2, pct_examples_3
+    return pct_examples_list
 
 
 def time_algo(call_string, module_name):
@@ -117,16 +101,18 @@ def time_algo(call_string, module_name):
     return run_time
 
 
-def algo_runner(python_call, module_name):
+def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
     """
     Calls an arbitrary module and runs the module with three different amounts
     of data for the purpose of timing the module and predicting how long the
     module will take to run with entire data set.
 
     :param python_call: str python string calling the algorithm to be timed
-    :param module_name: name of module from which function is called
-    :return times:
-    :return percents:
+    :param module_name: str name of module from which function is called
+    :param num_pts: int number of points for algo_runner to run against
+    :param num_iter: int number of iterations for algo_runner to run
+    :return times: list of times taken to run model in seconds
+    :return percents: list of percentages of data run through model
     """
 
     data_call, target_call = find_data_target(python_call)
@@ -134,20 +120,18 @@ def algo_runner(python_call, module_name):
     data = pd.read_csv(data_call, index_col=0)
     target = pd.read_csv(target_call, index_col=0)
 
-    pct_examples_1, pct_examples_2, pct_examples_3 = select_data(data, target)
-
-    string_1 = 'module.' + python_call.replace(data_call, 'data/data_1.csv')\
-        .replace(target_call, 'data/target_1.csv')
-    string_2 = 'module.' + python_call.replace(data_call, 'data/data_2.csv')\
-        .replace(target_call, 'data/target_2.csv')
-    string_3 = 'module.' + python_call.replace(data_call, 'data/data_3.csv')\
-        .replace(target_call, 'data/target_3.csv')
-
-    time_1 = time_algo(string_1, module_name)
-    time_2 = time_algo(string_2, module_name)
-    time_3 = time_algo(string_3, module_name)
-
-    times = [time_1, time_2, time_3]
-    percents = [pct_examples_1, pct_examples_2, pct_examples_3]
-
+    pct_examples_list = select_data(data, target, num_pts)
+    percents = []
+    times = []
+    for point in range(1, num_pts+1):
+        for iter_ in range(num_iter):
+            # string_1 = 'module.'
+            p_call = python_call.replace(data_call, 'data/data_' +
+                                         str(point) + '.csv')
+            p_call = p_call.replace(target_call, 'data/target_' +
+                                    str(point) + '.csv')
+            string_1 = 'module.' + p_call
+            times.append(time_algo(string_1, module_name))
+            percents.append(pct_examples_list[point-1])
+    percents = list(np.multiply(100, percents))
     return times, percents

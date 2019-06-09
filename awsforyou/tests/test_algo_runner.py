@@ -62,11 +62,11 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.DataFrame(target)
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(data, target)
-        self.assertTrue(np.isclose(pct_examples_1, 0.1, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_1, 0.01, rtol=0.01,
                                    atol=0.01))
-        self.assertTrue(np.isclose(pct_examples_2, 0.2, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_2, 0.02, rtol=0.01,
                                    atol=0.01))
-        self.assertTrue(np.isclose(pct_examples_3, 0.3, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_3, 0.03, rtol=0.01,
                                    atol=0.01))
 
         # case greater than 10000 less than 100000 rows:
@@ -82,11 +82,11 @@ class TestAlgoRunner(unittest.TestCase):
 
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(x_train, y_train)
-        self.assertTrue(np.isclose(pct_examples_1, 0.05, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_1, 0.01, rtol=0.001,
                                    atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_2, 0.10, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_2, 0.02, rtol=0.001,
                                    atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_3, 0.15, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_3, 0.03, rtol=0.001,
                                    atol=0.001))
 
         # Case greater than 100000 rows:
