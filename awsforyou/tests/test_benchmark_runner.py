@@ -118,3 +118,11 @@ class TestWriteScorecard(unittest.TestCase):
         scorecard = pd.read_csv('./aws-scorecard.csv')
         dict_scorecard = scorecard.to_dict(orient='records')[0]
         self.assertEqual(gold_dict, dict_scorecard)
+
+    def test_keyerror(self):
+        """
+        Test write_scorecard for when the variable results_dict passed
+        does not contain the correct key-value pair
+        """
+        dummy_dict = {'foo': 'bar'}
+        self.assertRaises(KeyError, bench.write_scorecard, dummy_dict)

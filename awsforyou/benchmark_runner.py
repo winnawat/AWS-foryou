@@ -19,13 +19,16 @@ def write_scorecard(results_dict):
     """
     Append the aws-scorecard using the dictionary input.
     """
-    # pylint: disable=broad-except
+
     results = pd.DataFrame([results_dict])
     try:
         scorecard = pd.read_csv('./aws-scorecard.csv')
         scorecard = pd.concat([scorecard, results], sort=False)
-    except Exception:
+    except FileNotFoundError:
         scorecard = results
+    except Exception:  # pragma: no cover
+        print("reading CSV encountered an error")
+        raise
 
     scorecard.set_index('datetime', inplace=True)
     scorecard.to_csv('./aws-scorecard.csv')
@@ -100,7 +103,7 @@ def run_benchmark(aws=False):
     """
     results = {}
 
-    if aws is True:
+    if aws is True:  # pragma: no cover
         from awsforyou import get_aws_instance
         instancetype_region = get_aws_instance.get_instance()
         results['instancetype'] = instancetype_region['instancetype']
@@ -128,7 +131,7 @@ def run_benchmark(aws=False):
     runtime = finish - start
     results['runtime'] = runtime
 
-    if aws is True:
+    if aws is True:  # pragma: no cover
         write_scorecard(results)
 
     print("mnist runtime: %f " % runtime)
