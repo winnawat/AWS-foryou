@@ -28,9 +28,6 @@ def write_scorecard(results_dict):
         scorecard = pd.concat([scorecard, results], sort=False)
     except FileNotFoundError:
         scorecard = results
-    except Exception:
-        print("reading CSV encountered an error")
-        raise
 
     scorecard.set_index('datetime', inplace=True)
     scorecard.to_csv('./aws-scorecard.csv')
