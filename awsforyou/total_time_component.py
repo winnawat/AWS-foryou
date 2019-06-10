@@ -22,8 +22,8 @@ def func_linear(data, a_factor, y_int):
 
 
 def func_sqrd(data, a_factor, y_int):
-    """A squaring function with y-intercept"""
-    return a_factor * data**2 + y_int
+    """A squaring function with y-intercept equal to zero"""
+    return a_factor * np.power(data, 2) + y_int
 
 
 def find_total_time(times, row_percents=(1, 5, 10)):
@@ -57,17 +57,15 @@ def find_total_time(times, row_percents=(1, 5, 10)):
 
     if best_fit == resid_linear:
         total_time = func_linear(100, a_linear, b_linear)
-        model = ["linear", a_linear, b_linear]
+        model = [total_time, "linear", a_linear, b_linear]
     elif best_fit == resid_nlogn:
         total_time = func_nlogn(100, a_nlogn, b_nlogn)
-        model = ["nlogn", a_nlogn, b_nlogn]
+        model = [total_time, "nlogn", a_nlogn, b_nlogn]
     elif best_fit == resid_sqrd:
         total_time = func_sqrd(100, a_sqrd, b_sqrd)
-        model = ["sqrd", a_sqrd, b_sqrd]
+        model = [total_time, "sqrd", a_sqrd, b_sqrd]
     else:
         total_time = func_log(100, a_log, b_log)
-        model = ["log", a_log, b_log]
+        model = [total_time, "log", a_log, b_log]
 
-    output = [total_time/3600] + [model]
-
-    return output
+    return model
