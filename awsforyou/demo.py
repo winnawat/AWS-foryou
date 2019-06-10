@@ -6,7 +6,6 @@ import total_time_component
 import algo_runner
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
-from keras.utils import np_utils
 
 
 def demo(num_pts=3, num_iter=3):

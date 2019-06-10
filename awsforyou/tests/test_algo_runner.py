@@ -112,12 +112,34 @@ class TestAlgoRunner(unittest.TestCase):
         :return: None
         """
 
+        print('Loading mnist dataset...')
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
+        print('Finished loading mnist dataset.')
+
+        # flatten 28*28 images to a 784 vector for each image
+        num_pixels = X_train.shape[1] * X_train.shape[2]
+        X_train = X_train.reshape(X_train.shape[0], num_pixels).astype(
+            'float32')
+        X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32')
+
+        data = pd.concat([pd.DataFrame(X_train), pd.DataFrame(X_test)], axis=0)
+
+        # y_train = np_utils.to_categorical(y_train)
+        # y_test = np_utils.to_categorical(y_test)
+
+        target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)],
+                           axis=0)
+
+        # Data and target to csv
+        print('Saving data to disk.')
+        data.to_csv('../data/mnist_data.csv')
+        target.to_csv('../data/mnist_target.csv')
+        print('Finished saving data to disk.')
+
         THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-        data_path = os.path.join(THIS_DIR, "data/mnist_data/"
-                                           "mnist_data_20k.csv")
-        target_path = os.path.join(THIS_DIR, "data/mnist_data/"
-                                             "mnist_target_20k.csv")
+        data_path = os.path.join(THIS_DIR, "../data/mnist_data.csv")
+        target_path = os.path.join(THIS_DIR, "../data/mnist_target.csv")
 
         run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
                      + target_path + "')"
@@ -131,5 +153,9 @@ class TestAlgoRunner(unittest.TestCase):
         self.assertTrue(isinstance(percents, list))
         for item in percents:
             self.assertTrue(isinstance(item, float))
+
+        print('Removing data files.')
+        os.remove('../data/mnist_data.csv')
+        os.remove('../data/mnist_target.csv')
 
         return None
