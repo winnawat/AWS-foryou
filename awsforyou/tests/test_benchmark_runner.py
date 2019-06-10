@@ -2,8 +2,9 @@
 Unittests for benchmark_runner.py
 """
 
-import unittest
+import mock
 import pandas as pd
+import unittest
 
 from awsforyou import benchmark_runner as bench
 
@@ -34,6 +35,31 @@ class TestRunBenchmark(unittest.TestCase):
         """
         runtime = bench.run_benchmark(aws=False)
         self.assertIsInstance(runtime, float)
+
+    def test_aws_true(self):
+        """
+        Uses mock to simulate the situation where aws = Test
+        """
+
+        mock_instancetype_region = \
+            {
+                'instancetype': 'someinstancetype', 'region': 'someregion'
+            }
+        mocked_aws_metadata = \
+            mock.patch('awsforyou.aws_metadata.get_instance',
+                       return_value=mock_instancetype_region)
+
+        mocked_aws_metadata.start()
+        runtime = bench.run_benchmark(aws=True)
+        scorecard = pd.read_csv('./aws-scorecard.csv')
+        dict_scorecard = scorecard.to_dict(orient='records')[0]
+        dict_scorecard = \
+            {
+                'instancetype': dict_scorecard['instancetype'],
+                'region': dict_scorecard['region']
+            }
+        mocked_aws_metadata.stop()
+        self.assertEqual(mock_instancetype_region, dict_scorecard)
 
 
 class TestWriteScorecard(unittest.TestCase):
