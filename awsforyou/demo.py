@@ -1,9 +1,8 @@
 
 import os
-import numpy as np
 import pandas as pd
-import total_time_component
-import algo_runner
+from awsforyou import total_time_component
+from awsforyou import algo_runner
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
 
@@ -46,7 +45,7 @@ def demo(num_pts=3, num_iter=3):
     MODULE_NAME = 'keras_mnist'
 
     print('Running algo_runner, this may take a few moments.')
-    times, percents = algo_runner.algo_runner(PYTHON_CALL, MODULE_NAME,
+    times, percents = algo_runner.run_algo(PYTHON_CALL, MODULE_NAME,
                                               num_pts, num_iter)
     tot_time = total_time_component.find_total_time(times, percents)[0]
     print('Finished algo_runner.')

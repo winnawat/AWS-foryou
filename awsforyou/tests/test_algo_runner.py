@@ -144,7 +144,7 @@ class TestAlgoRunner(unittest.TestCase):
         RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
                      + TARGET_PATH + "')"
 
-        times, percents = algo_runner.algo_runner(RUN_STRING, 'keras_mnist')
+        times, percents = algo_runner.run_algo(RUN_STRING, 'keras_mnist')
 
         self.assertTrue(isinstance(times, list))
         for item in times:
