@@ -46,7 +46,7 @@ def demo(num_pts=3, num_iter=3):
 
     print('Running algo_runner, this may take a few moments.')
     times, percents = algo_runner.run_algo(PYTHON_CALL, MODULE_NAME,
-                                              num_pts, num_iter)
+                                           num_pts, num_iter)
     tot_time = total_time_component.find_total_time(times, percents)[0]
     print('Finished algo_runner.')
 
