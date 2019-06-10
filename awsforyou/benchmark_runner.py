@@ -105,10 +105,10 @@ def run_benchmark(aws=False):
 
     if aws is True:
         from awsforyou import get_aws_instance  # pragma: no cover
-        instancetype_region =
-        get_aws_instance.get_instance()  # pragma: no cover
-        results['instancetype'] =
-        instancetype_region['instancetype']  # pragma: no cover
+        instancetype_region = \
+            get_aws_instance.get_instance()  # pragma: no cover
+        results['instancetype'] = \
+            instancetype_region['instancetype']  # pragma: no cover
         results['region'] = instancetype_region['region']  # pragma: no cover
     else:
         results['instancetype'] = 'local-machine'
