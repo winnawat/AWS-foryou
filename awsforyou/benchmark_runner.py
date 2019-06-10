@@ -27,8 +27,8 @@ def write_scorecard(results_dict):
     except FileNotFoundError:
         scorecard = results
     except Exception:  # pragma: no cover
-        print("reading CSV encountered an error")  # pragma: no cover
-        raise  # pragma: no cover
+        print("reading CSV encountered an error")
+        raise
 
     scorecard.set_index('datetime', inplace=True)
     scorecard.to_csv('./aws-scorecard.csv')
@@ -103,13 +103,11 @@ def run_benchmark(aws=False):
     """
     results = {}
 
-    if aws is True:
-        from awsforyou import get_aws_instance  # pragma: no cover
-        instancetype_region = \
-            get_aws_instance.get_instance()  # pragma: no cover
-        results['instancetype'] = \
-            instancetype_region['instancetype']  # pragma: no cover
-        results['region'] = instancetype_region['region']  # pragma: no cover
+    if aws is True:  # pragma: no cover
+        from awsforyou import get_aws_instance
+        instancetype_region = get_aws_instance.get_instance()
+        results['instancetype'] = instancetype_region['instancetype']
+        results['region'] = instancetype_region['region']
     else:
         results['instancetype'] = 'local-machine'
         results['region'] = 'local-machine'
@@ -133,8 +131,8 @@ def run_benchmark(aws=False):
     runtime = finish - start
     results['runtime'] = runtime
 
-    if aws is True:
-        write_scorecard(results)  # pragma: no cover
+    if aws is True:  # pragma: no cover
+        write_scorecard(results)
 
     print("mnist runtime: %f " % runtime)
     return runtime
