@@ -35,10 +35,7 @@ def run_mnist(data_loc, target_loc):
     :return: None
     """
     np.random.seed(47)
-    print('loading data.csv')
     data = pd.read_csv(data_loc, index_col=0)
-
-    print('loading target.csv')
     target = pd.read_csv(target_loc, index_col=0)
 
     data_shape = data.shape[0]
