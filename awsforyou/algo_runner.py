@@ -104,7 +104,7 @@ def time_algo(call_string, module_name):
     return run_time
 
 
-def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
+def run_algo(python_call, module_name, num_pts=3, num_iter=3):
     """
     Calls an arbitrary module and runs the module with three different amounts
     of data for the purpose of timing the module and predicting how long the
@@ -122,19 +122,15 @@ def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
 
     if data_call.split('.')[1] == 'csv':
         data = pd.read_csv(data_call, index_col=0)
-    elif data_call.split('.')[1] == 'xls' or data_call.split('.')[1] == 'xlsx':
-        data = pd.read_excel(data_call, index_col=0)
     else:
-        raise ValueError('data and target must be of type csv, xls or xlsx')
+        raise ValueError('data and target must be of type csv')
 
     target_suffix = target_call.split('.')[1]
 
     if target_suffix == 'csv':
         target = pd.read_csv(target_call, index_col=0)
-    elif target_suffix == 'xls' or target_suffix == 'xlsx':
-        target = pd.read_excel(target_call, index_col=0)
     else:
-        raise ValueError('data and target must be of type csv, xls or xlsx')
+        raise ValueError('data and target must be of type csv')
 
     pct_examples_list = select_data(data, target, num_pts)
     percents = []
