@@ -65,10 +65,6 @@ def select_data(data, target, num_pts=3):
     for pct_examples in pct_examples_list:
         num_examples_list.append(int(np.ceil(pct_examples * num_examples)))
 
-    data_plus_target.head(1).iloc[:, :data.shape[1]].to_csv('data/data_0.csv')
-    data_plus_target.head(1).iloc[:, data.shape[1]:].to_csv(
-        'data/target_0.csv')
-
     iter_ = 1
     for num_examp in num_examples_list:
         data_plus_target_1 = data_plus_target.sample(num_examp)
@@ -117,12 +113,26 @@ def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
 
     data_call, target_call = find_data_target(python_call)
 
-    data = pd.read_csv(data_call, index_col=0)
-    target = pd.read_csv(target_call, index_col=0)
+    if data_call.split('.')[1] == 'csv':
+        data = pd.read_csv(data_call, index_col=0)
+    elif data_call.split('.')[1] == 'xls' or data_call.split('.')[1] == 'xlsx':
+        data = pd.read_excel(data_call, index_col=0)
+    else:
+        raise ValueError('data and target must be of type csv, xls or xlsx')
+
+    target_suffix = target_call.split('.')[1]
+
+    if target_suffix == 'csv':
+        target = pd.read_csv(target_call, index_col=0)
+    elif target_suffix == 'xls' or target_suffix == 'xlsx':
+        target = pd.read_excel(target_call, index_col=0)
+    else:
+        raise ValueError('data and target must be of type csv, xls or xlsx')
 
     pct_examples_list = select_data(data, target, num_pts)
     percents = []
     times = []
+
     for point in range(1, num_pts+1):
         for iter_ in range(num_iter):
             # string_1 = 'module.'
@@ -133,5 +143,12 @@ def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
             string_1 = 'module.' + p_call
             times.append(time_algo(string_1, module_name))
             percents.append(pct_examples_list[point-1])
+            print('point ' + str(point) + ', iteration' + str(iter_) +
+                  'complete.')
     percents = list(np.multiply(100, percents))
+
+    for point in range(1, num_pts + 1):
+        os.remove('data/data_' + str(point) + '.csv')
+        os.remove('data/target_' + str(point) + '.csv')
+
     return times, percents
