@@ -20,6 +20,7 @@ def func_linear(data, a_factor, y_int):
     """A linear function with y-intercept"""
     return a_factor * data + y_int
 
+
 def func_sqrd(data, a_factor, y_int):
     """A squaring function with y-intercept"""
     return a_factor * data**2 + y_int
@@ -50,7 +51,7 @@ def find_total_time(times, row_percents=(1, 5, 10)):
     a_sqrd = popt_sqrd[0].flatten()
     b_sqrd = popt_sqrd[1].flatten()
     resid_sqrd = np.linalg.norm(times - func_sqrd(row_percents,
-                                                    a_sqrd, b_sqrd))
+                                                  a_sqrd, b_sqrd))
 
     best_fit = np.min([resid_linear, resid_nlogn, resid_log, resid_sqrd])
 
@@ -70,4 +71,3 @@ def find_total_time(times, row_percents=(1, 5, 10)):
     output = [total_time/3600] + [model]
 
     return output
-
