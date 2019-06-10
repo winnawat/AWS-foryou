@@ -132,14 +132,14 @@ class TestAlgoRunner(unittest.TestCase):
 
         # Data and target to csv
         print('Saving data to disk.')
-        data.to_csv('../data/mnist_data.csv')
-        target.to_csv('../data/mnist_target.csv')
+        data.to_csv('data/mnist_data.csv')
+        target.to_csv('data/mnist_target.csv')
         print('Finished saving data to disk.')
 
         THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-        data_path = os.path.join(THIS_DIR, "../data/mnist_data.csv")
-        target_path = os.path.join(THIS_DIR, "../data/mnist_target.csv")
+        data_path = os.path.join(THIS_DIR, "data/mnist_data.csv")
+        target_path = os.path.join(THIS_DIR, "data/mnist_target.csv")
 
         run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
                      + target_path + "')"
@@ -155,7 +155,7 @@ class TestAlgoRunner(unittest.TestCase):
             self.assertTrue(isinstance(item, float))
 
         print('Removing data files.')
-        os.remove('../data/mnist_data.csv')
-        os.remove('../data/mnist_target.csv')
+        os.remove('data/mnist_data.csv')
+        os.remove('data/mnist_target.csv')
 
         return None
