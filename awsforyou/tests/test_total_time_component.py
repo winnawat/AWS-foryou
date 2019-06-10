@@ -47,4 +47,4 @@ class TestPermits(unittest.TestCase):
         test for squared time
         """
         calc_sqrd = int(total_time_component.find_total_time(TIMES_SQRD)[0])
-        self.assertAlmostEqual(calc_sqrd, EXPT_TIME_LINEAR)
+        self.assertAlmostEqual(calc_sqrd, EXPT_TIME_LIN)
