@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from awsforyou.pricing import aws_pricing
+from awsforyou import aws_pricing
 
 
 class TestAwsPricing(unittest.TestCase):
