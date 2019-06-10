@@ -2,10 +2,7 @@ import boto3
 
 import pandas as pd
 
-ON_DEMAND_PRICING_CSV = 'https://gist.githubusercontent.com/vivekkr12/' \
-                        '680730870b6b7f6bfa46fe66ce715d6c/raw/' \
-                        '208b9b1f36bae71e4b8dc23da0a8bcdcb3f8c14c/' \
-                        'aws-on-demand-pricing.csv'
+ON_DEMAND_PRICING_CSV = 'https://tinyurl.com/yykw7p8c'
 ON_DEMAND_PRICES = pd.read_csv(ON_DEMAND_PRICING_CSV,
                                error_bad_lines=False,
                                warn_bad_lines=False)
