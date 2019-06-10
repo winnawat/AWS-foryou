@@ -130,21 +130,21 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)],
                            axis=0)
 
-        # Data and target to csv
-        print('Saving data to disk.')
-        data.to_csv('data/mnist_data.csv')
-        target.to_csv('data/mnist_target.csv')
-        print('Finished saving data to disk.')
-
         THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-        data_path = os.path.join(THIS_DIR, "data/mnist_data.csv")
-        target_path = os.path.join(THIS_DIR, "data/mnist_target.csv")
+        DATA_PATH = os.path.join(THIS_DIR, "data/mnist_data.csv")
+        TARGET_PATH = os.path.join(THIS_DIR, "data/mnist_target.csv")
 
-        run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
-                     + target_path + "')"
+        # Data and target to csv
+        print('Saving data to disk.')
+        data.to_csv(DATA_PATH)
+        target.to_csv(TARGET_PATH)
+        print('Finished saving data to disk.')
 
-        times, percents = algo_runner.algo_runner(run_string, 'keras_mnist')
+        RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
+                     + TARGET_PATH + "')"
+
+        times, percents = algo_runner.algo_runner(RUN_STRING, 'keras_mnist')
 
         self.assertTrue(isinstance(times, list))
         for item in times:
@@ -155,7 +155,7 @@ class TestAlgoRunner(unittest.TestCase):
             self.assertTrue(isinstance(item, float))
 
         print('Removing data files.')
-        os.remove('data/mnist_data.csv')
-        os.remove('data/mnist_target.csv')
+        os.remove(DATA_PATH)
+        os.remove(TARGET_PATH)
 
         return None
