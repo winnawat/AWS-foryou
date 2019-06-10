@@ -3,6 +3,7 @@ Unittests for benchmark_runner.py
 """
 
 import mock
+import os
 import pandas as pd
 import unittest
 
@@ -150,5 +151,6 @@ class TestWriteScorecard(unittest.TestCase):
         Test write_scorecard for when the variable results_dict passed
         does not contain the correct key-value pair
         """
+        os.remove("aws-scorecard.csv")
         dummy_dict = {'foo': 'bar'}
         self.assertRaises(KeyError, bench.write_scorecard, dummy_dict)
