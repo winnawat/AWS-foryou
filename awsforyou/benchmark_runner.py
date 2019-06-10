@@ -19,12 +19,12 @@ def write_scorecard(results_dict):
     """
     Append the aws-scorecard using the dictionary input.
     """
-    # pylint: disable=broad-except
+
     results = pd.DataFrame([results_dict])
     try:
         scorecard = pd.read_csv('./aws-scorecard.csv')
         scorecard = pd.concat([scorecard, results], sort=False)
-    except Exception:
+    except FileNotFoundError:
         scorecard = results
 
     scorecard.set_index('datetime', inplace=True)
