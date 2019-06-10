@@ -14,6 +14,8 @@ from keras.models import Sequential
 from keras.utils import np_utils
 import psutil
 
+from awsforyou import aws_metadata
+
 
 def write_scorecard(results_dict):
     """
@@ -26,7 +28,7 @@ def write_scorecard(results_dict):
         scorecard = pd.concat([scorecard, results], sort=False)
     except FileNotFoundError:
         scorecard = results
-    except Exception:  # pragma: no cover
+    except Exception:
         print("reading CSV encountered an error")
         raise
 
@@ -103,9 +105,9 @@ def run_benchmark(aws=False):
     """
     results = {}
 
-    if aws is True:  # pragma: no cover
-        from awsforyou import get_aws_instance
-        instancetype_region = get_aws_instance.get_instance()
+    if aws is True:
+        instancetype_region = aws_metadata.get_instance()
+        # get_aws_instance.get_instance() = some funciton that retuns dict
         results['instancetype'] = instancetype_region['instancetype']
         results['region'] = instancetype_region['region']
     else:
@@ -131,7 +133,7 @@ def run_benchmark(aws=False):
     runtime = finish - start
     results['runtime'] = runtime
 
-    if aws is True:  # pragma: no cover
+    if aws is True:
         write_scorecard(results)
 
     print("mnist runtime: %f " % runtime)
