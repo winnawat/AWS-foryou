@@ -107,7 +107,6 @@ def run_benchmark(aws=False):
 
     if aws is True:
         instancetype_region = aws_metadata.get_instance()
-        # get_aws_instance.get_instance() = some funciton that retuns dict
         results['instancetype'] = instancetype_region['instancetype']
         results['region'] = instancetype_region['region']
     else:
