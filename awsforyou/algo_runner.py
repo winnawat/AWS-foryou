@@ -59,7 +59,14 @@ def select_data(data, target, num_pts=3):
     data_plus_target = pd.concat([data, target], axis=1)
     num_examples = data_plus_target.shape[0]
 
-    pct_examples_list = list(np.multiply(0.01, range(1, num_pts+1)))
+    if num_examples >= 100000:
+        multiplier = 0.01
+    elif num_examples >= 10000:
+        multiplier = 0.02
+    else:
+        multiplier = 0.05
+
+    pct_examples_list = list(np.multiply(multiplier, range(1, num_pts+1)))
 
     num_examples_list = []
     for pct_examples in pct_examples_list:
@@ -143,8 +150,8 @@ def algo_runner(python_call, module_name, num_pts=3, num_iter=3):
             string_1 = 'module.' + p_call
             times.append(time_algo(string_1, module_name))
             percents.append(pct_examples_list[point-1])
-            print('point ' + str(point) + ', iteration' + str(iter_) +
-                  'complete.')
+            print('point ' + str(point) + ', iteration ' + str(iter_ + 1) +
+                  ' complete.')
     percents = list(np.multiply(100, percents))
 
     for point in range(1, num_pts + 1):

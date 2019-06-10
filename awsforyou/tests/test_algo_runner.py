@@ -62,11 +62,11 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.DataFrame(target)
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(data, target)
-        self.assertTrue(np.isclose(pct_examples_1, 0.01, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_1, 0.05, rtol=0.01,
                                    atol=0.01))
-        self.assertTrue(np.isclose(pct_examples_2, 0.02, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_2, 0.10, rtol=0.01,
                                    atol=0.01))
-        self.assertTrue(np.isclose(pct_examples_3, 0.03, rtol=0.01,
+        self.assertTrue(np.isclose(pct_examples_3, 0.15, rtol=0.01,
                                    atol=0.01))
 
         # case greater than 10000 less than 100000 rows:
@@ -82,11 +82,11 @@ class TestAlgoRunner(unittest.TestCase):
 
         pct_examples_1, pct_examples_2, pct_examples_3 = \
             algo_runner.select_data(x_train, y_train)
-        self.assertTrue(np.isclose(pct_examples_1, 0.01, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_1, 0.02, rtol=0.001,
                                    atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_2, 0.02, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_2, 0.04, rtol=0.001,
                                    atol=0.001))
-        self.assertTrue(np.isclose(pct_examples_3, 0.03, rtol=0.001,
+        self.assertTrue(np.isclose(pct_examples_3, 0.06, rtol=0.001,
                                    atol=0.001))
 
         # Case greater than 100000 rows:
@@ -112,17 +112,39 @@ class TestAlgoRunner(unittest.TestCase):
         :return: None
         """
 
+        print('Loading mnist dataset...')
+        (X_train, y_train), (X_test, y_test) = mnist.load_data()
+        print('Finished loading mnist dataset.')
+
+        # flatten 28*28 images to a 784 vector for each image
+        num_pixels = X_train.shape[1] * X_train.shape[2]
+        X_train = X_train.reshape(X_train.shape[0], num_pixels).astype(
+            'float32')
+        X_test = X_test.reshape(X_test.shape[0], num_pixels).astype('float32')
+
+        data = pd.concat([pd.DataFrame(X_train), pd.DataFrame(X_test)], axis=0)
+
+        # y_train = np_utils.to_categorical(y_train)
+        # y_test = np_utils.to_categorical(y_test)
+
+        target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)],
+                           axis=0)
+
         THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-        data_path = os.path.join(THIS_DIR, "data/mnist_data/"
-                                           "mnist_data_20k.csv")
-        target_path = os.path.join(THIS_DIR, "data/mnist_data/"
-                                             "mnist_target_20k.csv")
+        DATA_PATH = os.path.join(THIS_DIR, "data/mnist_data.csv")
+        TARGET_PATH = os.path.join(THIS_DIR, "data/mnist_target.csv")
 
-        run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
-                     + target_path + "')"
+        # Data and target to csv
+        print('Saving data to disk.')
+        data.to_csv(DATA_PATH)
+        target.to_csv(TARGET_PATH)
+        print('Finished saving data to disk.')
 
-        times, percents = algo_runner.algo_runner(run_string, 'keras_mnist')
+        RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
+                     + TARGET_PATH + "')"
+
+        times, percents = algo_runner.algo_runner(RUN_STRING, 'keras_mnist')
 
         self.assertTrue(isinstance(times, list))
         for item in times:
@@ -131,5 +153,9 @@ class TestAlgoRunner(unittest.TestCase):
         self.assertTrue(isinstance(percents, list))
         for item in percents:
             self.assertTrue(isinstance(item, float))
+
+        print('Removing data files.')
+        os.remove(DATA_PATH)
+        os.remove(TARGET_PATH)
 
         return None

@@ -6,7 +6,6 @@ import total_time_component
 import algo_runner
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
-from keras.utils import np_utils
 
 
 def demo(num_pts=3, num_iter=3):
@@ -62,10 +61,10 @@ def demo(num_pts=3, num_iter=3):
     all_percents.append(100)
 
     print('Plotting results.')
-    plt.loglog(percents, times, 'ro')
-    plt.loglog(all_percents, all_times, 'b', linewidth=2)
-    plt.xlim(0, max(tot_time, 100))
-    plt.ylim(0, max(tot_time, 100))
+    plt.plot(percents, times, 'ro')
+    plt.plot(all_percents, all_times, 'b', linewidth=2)
+    plt.xlim(0, max(tot_time + 0.1*tot_time, 100))
+    plt.ylim(0, max(tot_time + 0.1*tot_time, 100))
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
     return tot_time
