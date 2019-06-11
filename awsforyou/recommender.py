@@ -37,7 +37,7 @@ def add_estimated_time_aws(dataframe, python_call, module_name):
     times, percents = ar.run_algo(python_call, module_name)
     est_time_user = tt.find_total_time(times, percents)
     user_benchmark = br.run_benchmark()
-    est_time_aws = dataframef[['runtime']]/user_benchmark * est_time_user[0]
+    est_time_aws = dataframe[['runtime']]/user_benchmark * est_time_user[0]
     dataframe["estimated_time_aws"] = est_time_aws
     return dataframe
 
