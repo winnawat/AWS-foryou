@@ -14,7 +14,7 @@ EXPT_TIME_LOG_RANGE = [20, 22]
 EXPT_TIME_SQRD = [10000]
 
 
-class TestPermits(unittest.TestCase):
+class TestCalc(unittest.TestCase):
     """
     this class contains tests for log, squared, and linear times
     """
