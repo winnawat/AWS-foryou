@@ -31,14 +31,16 @@ def get_diabetes(multiplier=1):
 
         new_x = np.append(new_x, mock_x, axis=0)
         new_y = np.append(new_y, mock_y, axis=0)
-    np.savetxt("./examples/x_diabetes.csv", new_x, delimiter=",")
-    np.savetxt("./examples/y_diabetes.csv", new_y, delimiter=",")
+
+    df_new_x = pd.DataFrame(new_x).to_csv('./examples/x_diabetes.csv')
+    df_new_y = pd.DataFrame(new_y).to_csv('./examples/y_diabetes.csv')
+
     return new_x, new_y
 
 
 def run_sklearn_diabetes(data_loc, target_loc):
-    x = np.array(pd.read_csv(data_loc))
-    y = np.array(pd.read_csv(target_loc))
+    x = np.array(pd.read_csv(data_loc, index_col=0))
+    y = np.array(pd.read_csv(target_loc, index_col=0))
 
     X_train, X_test, y_train, y_test = \
         train_test_split(x, y.ravel(), random_state=0)
