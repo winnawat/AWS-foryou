@@ -21,7 +21,8 @@ Fit four optimized curves to the data points using scipy:
 - Exponential  
 - Logn
 - nLogn
-Choose the function with the best fit (smallest residuals) 
+Choose the function with the best fit (smallest residuals)
+
 Output (expected total time on 100% data)
   
 ### Component 4: (benchmark_runner)  
