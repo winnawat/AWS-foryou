@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>AWS for you - Instance in an Instant</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+  <style type="text/css">
+    /*
+     * Base structure
+     */
+
+    /* Move down content because we have a fixed navbar that is 50px tall */
+    body {
+      padding-top: 50px;
+    }
+
+    /*
+     * Global add-ons
+     */
+
+    .sub-header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /*
+     * Top navigation
+     * Hide default border to remove 1px line.
+     */
+    .navbar-fixed-top {
+      border: 0;
+    }
+
+    /*
+     * Sidebar
+     */
+
+    /* Hide for mobile, show later */
+    .sidebar {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+      }
+    }
+
+    /* Sidebar navigation */
+    .nav-sidebar {
+      margin-right: -21px; /* 20px padding + 1px border */
+      margin-bottom: 20px;
+      margin-left: -20px;
+    }
+
+    .nav-sidebar > li > a {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+
+    .nav-sidebar > .active > a,
+    .nav-sidebar > .active > a:hover,
+    .nav-sidebar > .active > a:focus {
+      color: #fff;
+      background-color: #428bca;
+    }
+
+
+    /*
+     * Main content
+     */
+
+    .main {
+      padding: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .main {
+        padding-right: 40px;
+        padding-left: 40px;
+      }
+    }
+
+    .main .page-header {
+      margin-top: 0;
+    }
+
+
+    /*
+     * Placeholder dashboard ideas
+     */
+
+    .placeholders {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .placeholders h4 {
+      margin-bottom: 0;
+    }
+
+    .placeholder {
+      margin-bottom: 20px;
+    }
+
+    .placeholder img {
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    th:hover {
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+              aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" target="_blank" href="https://github.com/winnawat/AWS-foryou">AWS for You</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 main">
+      <div class="jumbotron text-center">
+        <img src="https://raw.githubusercontent.com/winnawat/AWS-foryou/master/logo.PNG" alt="logo">
+      </div>
+
+      <h2 class="sub-header">Instance Recommendations</h2>
+      <div id="recommendation">
+        <input type="search" class="form-control search" placeholder="Type text to Search and Filter">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th class="sort" data-sort="instance_type">Instance Type</th>
+              <th class="sort" data-sort="runtime">Runtime</th>
+              <th class="sort" data-sort="estimated_time_aws">Estimated Time AWS</th>
+              <th class="sort" data-sort="region">Region</th>
+              <th class="sort" data-sort="spot_price">Spot Price ($/hr)</th>
+              <th class="sort" data-sort="on_demand_price">On Demand Price ($/hr)</th>
+              <th class="sort" data-sort="est_cost_spot_price">Estimated Cost Spot ($)</th>
+              <th class="sort" data-sort="est_cost_on_demand_price">Estimated Cost On Demand ($)</th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for key, value in recommendation_df.iterrows() %}
+            <tr>
+              <td class="instance_type">{{value['instance_type']}}</td>
+              <td class="runtime">{{value['runtime']}}</td>
+              <td class="estimated_time_aws">{{value['estimated_time_aws']}}</td>
+              <td class="region">{{value['region']}}</td>
+              <td class="spot_price">{{value['spot_price']}}</td>
+              <td class="on_demand_price">{{value['on_demand_price']}}</td>
+              <td class="est_cost_spot_price">{{value['est_cost_spot_price']}}</td>
+              <td class="est_cost_on_demand_price">{{value['est_cost_on_demand_price']}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    let options = {
+        valueNames: ['instance_type', 'runtime', 'estimated_time_aws', 'region', 'spot_price', 'on_demand_price', 'est_cost_spot_price', 'est_cost_on_demand_price']
+    };
+    let userList = new List('recommendation', options)
+</script>
+</body>
+</html>
