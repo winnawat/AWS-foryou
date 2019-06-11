@@ -8,11 +8,11 @@ setuptools.setup(
     version="0.0.1",
     author=["Vivek Kumar", "John Mahoney", "Win Nawat S", "Peter Meleney"],
     author_email=["vivekuma@uw.edu", "jm888@uw.edu", "nawats@uw.edu", "pmeleney@uw.edu"],
-    description="",
+    description="Instance in an Instant",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/winnawat/AWS-foryou",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
