@@ -46,5 +46,13 @@ AWS-foryou/
 ```
 
 ## Installation
+1. pip install
+'''python
+pip install awsforyou
+'''
 
+2. download the code and import in python
+'''
+import awsforyou
+'''
 ## Examples
