@@ -14,7 +14,7 @@ Else:
 Run the .py file against 1,000, 5,000, 10,000 rows  
 Return time taken to run the .py file against the three datasets  
 
-### Component 3: (total_time_estimate)
+### Component 3: (total_time)
 Input (runtime per percent of total rows(default is 1%, 5%, 10%) and the row percents, from Component 2)  
 Fit four optimized curves to the data points using scipy:  
 - Linear  
