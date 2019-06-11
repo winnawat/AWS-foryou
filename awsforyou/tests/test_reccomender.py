@@ -1,4 +1,4 @@
-"""this module contains three tests for the total time component"""
+"""This module contains tests for the recommender module"""
 import unittest
 from awsforyou import recommender as rc
 
