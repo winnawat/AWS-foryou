@@ -140,14 +140,14 @@ class TestAlgoRunner(unittest.TestCase):
 
         # Data and target to csv
         print('Saving data to disk.')
-        data.to_csv(DATA_PATH)
-        target.to_csv(TARGET_PATH)
+        data.to_csv(data_path)
+        target.to_csv(target_path)
         print('Finished saving data to disk.')
 
-        RUN_STRING = "run_mnist(data_loc='" + data_path + "', target_loc='" \
+        run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
                      + target_path + "')"
 
-        times, percents = algo_runner.run_algo(RUN_STRING,
+        times, percents = algo_runner.run_algo(run_string,
                                                'awsforyou.tests.'
                                                'test_keras_mnist')
 
