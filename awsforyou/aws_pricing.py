@@ -90,10 +90,6 @@ def get_instance_pricing(instance_types):
                 LOGGER.warning('Failed to fetch Price for instance {} in '
                                'region {}'.format(instance_type, region_name))
 
-        print(len(instance_type_list))
-        print(len(all_regions))
-        print(len(instance_type_list))
-
     return pd.DataFrame({DF_COL_INSTANCE_TYPE: instance_type_list,
                          DF_COL_REGION: regions_list,
                          DF_COL_SPOT_PRICE: spot_price_list,
