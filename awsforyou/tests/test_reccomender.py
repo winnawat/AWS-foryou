@@ -68,4 +68,4 @@ class TestRecommender(unittest.TestCase):
 
 
 def mock_run_algo(python_call, module_name):
-    return [2, 4, 6], [1, 5 ,10]
+    return [2, 4, 6], [1, 5, 10]
