@@ -62,6 +62,7 @@ def create_dataframe(python_call, module_name):
     get_benchmark_data, add_estimated_time_aws, and add_estimated_price.
     """
     benchmark_df = get_benchmark_data()
-    bench_time_df = add_estimated_time_aws(benchmark_df, python_call, module_name)
+    bench_time_df = add_estimated_time_aws(benchmark_df,
+                                           python_call, module_name)
     complete_df = add_estimated_price(bench_time_df)
     return complete_df
