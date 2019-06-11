@@ -33,6 +33,11 @@ def demo(num_pts=3, num_iter=3):
 
     target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)], axis=0)
 
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+
+    if not os.path.exists(this_dir + '/data'):
+        os.mkdir(this_dir + '/data')
+
     # Data and target to csv
     print('Saving data to disk.')
     data.to_csv('data/mnist_data.csv')

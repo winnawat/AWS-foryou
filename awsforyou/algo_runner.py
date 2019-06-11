@@ -6,6 +6,7 @@ component.
 
 import importlib
 import re
+import shutil
 import time
 import numpy as np
 import pandas as pd
@@ -118,6 +119,11 @@ def run_algo(python_call, module_name, num_pts=3, num_iter=3):
     :return percents: list of percentages of data run through model
     """
 
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+
+    if not os.path.exists(this_dir + '/data'):
+        os.mkdir(this_dir + '/data')
+
     data_call, target_call = find_data_target(python_call)
 
     if data_call.split('.')[1] == 'csv':
@@ -150,8 +156,23 @@ def run_algo(python_call, module_name, num_pts=3, num_iter=3):
                   ' complete.')
     percents = list(np.multiply(100, percents))
 
-    for point in range(1, num_pts + 1):
-        os.remove('data/data_' + str(point) + '.csv')
-        os.remove('data/target_' + str(point) + '.csv')
+    print('removing data files.')
+    for point in range(1, num_pts+1):
+        if os.path.exists(this_dir + '/../data/data_' + str(point) + '.csv'):
+            os.remove(this_dir + '/../data/data_' + str(point) + '.csv')
+        else:
+            pass
+        if os.path.exists(this_dir + '/../data/target_' + str(point) + '.csv'):
+            os.remove(this_dir + '/../data/target_' + str(point) + '.csv')
+        else:
+            pass
+    if os.path.exists(this_dir + '/data'):
+        os.rmdir(this_dir + '/data')
+    else:
+        pass
+
+    # If run in test mode, delete test data download files
+    if os.path.exists(this_dir + '/tests/data'):
+        shutil.rmtree(this_dir + '/tests/data')
 
     return times, percents

@@ -3,6 +3,7 @@ Module that runs a simple perceptron on MNIST dataset.
 """
 
 import os
+import shutil
 import unittest
 import numpy as np
 import pandas as pd
@@ -130,21 +131,24 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)],
                            axis=0)
 
-        THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+        this_dir = os.path.dirname(os.path.abspath(__file__))
 
-        DATA_PATH = os.path.join(THIS_DIR, "data/mnist_data.csv")
-        TARGET_PATH = os.path.join(THIS_DIR, "data/mnist_target.csv")
+        if not os.path.exists(this_dir + '/data'):
+            os.mkdir(this_dir + '/data')
+
+        data_path = os.path.join(this_dir, "data/mnist_data.csv")
+        target_path = os.path.join(this_dir, "data/mnist_target.csv")
 
         # Data and target to csv
         print('Saving data to disk.')
-        data.to_csv(DATA_PATH)
-        target.to_csv(TARGET_PATH)
+        data.to_csv(data_path)
+        target.to_csv(target_path)
         print('Finished saving data to disk.')
 
-        RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
-                     + TARGET_PATH + "')"
+        run_string = "run_mnist(data_loc='" + data_path + "', target_loc='" \
+                     + target_path + "')"
 
-        times, percents = algo_runner.run_algo(RUN_STRING,
+        times, percents = algo_runner.run_algo(run_string,
                                                'awsforyou.tests.'
                                                'test_keras_mnist')
 
@@ -155,9 +159,5 @@ class TestAlgoRunner(unittest.TestCase):
         self.assertTrue(isinstance(percents, list))
         for item in percents:
             self.assertTrue(isinstance(item, float))
-
-        print('Removing data files.')
-        os.remove(DATA_PATH)
-        os.remove(TARGET_PATH)
 
         return None
