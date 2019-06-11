@@ -130,10 +130,13 @@ class TestAlgoRunner(unittest.TestCase):
         target = pd.concat([pd.DataFrame(y_train), pd.DataFrame(y_test)],
                            axis=0)
 
-        THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+        this_dir = os.path.dirname(os.path.abspath(__file__))
 
-        DATA_PATH = os.path.join(THIS_DIR, "data/mnist_data.csv")
-        TARGET_PATH = os.path.join(THIS_DIR, "data/mnist_target.csv")
+        if not os.path.exists(this_dir + '/data'):
+            os.mkdir(this_dir + '/data')
+
+        data_path = os.path.join(this_dir, "data/mnist_data.csv")
+        target_path = os.path.join(this_dir, "data/mnist_target.csv")
 
         # Data and target to csv
         print('Saving data to disk.')
@@ -141,8 +144,8 @@ class TestAlgoRunner(unittest.TestCase):
         target.to_csv(TARGET_PATH)
         print('Finished saving data to disk.')
 
-        RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
-                     + TARGET_PATH + "')"
+        RUN_STRING = "run_mnist(data_loc='" + data_path + "', target_loc='" \
+                     + target_path + "')"
 
         times, percents = algo_runner.run_algo(RUN_STRING,
                                                'awsforyou.tests.'
@@ -157,7 +160,6 @@ class TestAlgoRunner(unittest.TestCase):
             self.assertTrue(isinstance(item, float))
 
         print('Removing data files.')
-        os.remove(DATA_PATH)
-        os.remove(TARGET_PATH)
+        os.remove(this_dir + '/data')
 
         return None
