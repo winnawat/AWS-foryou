@@ -19,6 +19,8 @@ AWS-foryou/
     |- recommender.py
     |- report_generator.py
     |- total_time_component.py
+    | - ui/
+      | - template.html
     |- tests/
       |- __init__.py
       |- test_algo_runner.py
@@ -46,14 +48,42 @@ AWS-foryou/
 ```
 ---
 ## Installation
-1. pip install
-```python
-pip install awsforyou
+
+Clone the repo and create a virtual environment in the root of the repo
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+If you're using Anaconda, create and activate a new conda environment.
+For conda run
+```bash
+conda create --name awsforyou
+conda activate awsforyou
 ```
 
-2. download the code and import in python
+Install the dependencies from the `requirements.txt` file using
+```bash
+python -m pip install -r requirements.txt
 ```
-import awsforyou
+
+If you don't have `setuptools` and `wheel` install them using
+```bash
+python -m pip install --upgrade setuptools wheel
 ```
----
-## Examples
+
+Install the package using the following command
+```bash
+python setup.py sdist bdist_wheel
+```
+
+This will generate the pip installation package `awsforyou-0.0.1-py3-none-any.whl` in the `dist/` directory.
+The package `awsforyou` can now be installed using
+
+```bash
+pip install awsforyou-0.0.1-py3-none-any.whl
+```
+
+## Usage
+
+To see how to use the package to get instance recommendation, 
+refer to the [example notebook](examples/examples.ipynb)
