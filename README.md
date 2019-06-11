@@ -12,19 +12,34 @@ AWS-foryou/
   |- README.md
   |- awsforyou/
     |- __init__.py
+    |- algo_runner.py
+    |- aws_metadata.py
+    |- aws_pricing.py
     |- benchmark_runner.py
-    |- get_aws_instance.py
-    |- run_benchmark_set.py
+    |- recommender.py
+    |- report_generator.py
     |- total_time_component.py
     |- tests/
       |- __init__.py
+      |- test_algo_runner.py
+      |- test_aws_metadata.py
+      |- test_aws_pricing.py
       |- test_benchmark_runner.py
+      |- test_keras_mnist.py
+      |- test_reccomender.py
+      |- test_report_generator.py
       |- test_total_time_compoment.py
-    |- data/
-      |- aws-scorecard.csv
+  |- data/
+    |- aws-scorecard.csv
   |- docs/
     |- component-specification.md
     |- functional-specification.md
+  |-examples/
+    |-demo,py
+    |-examples.ipynb
+    |-sklearn_diabetes.py
+    |-x_diabetes.csv
+    |-y_diabetes.csv
   |- setup.py
   |- requirements.txt
   |- LICENSE
