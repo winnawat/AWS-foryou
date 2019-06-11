@@ -57,8 +57,6 @@ def demo(num_pts=3, num_iter=3):
     model = total_time_component.find_total_time(times, percents)
     tot_time = model[0]
 
-
-
     print('Removing MNIST data files.')
     os.remove('data/mnist_data.csv')
     os.remove('data/mnist_target.csv')
@@ -92,5 +90,5 @@ def demo(num_pts=3, num_iter=3):
     plt.ylim(0, max(tot_time + 0.1*tot_time, 100))
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
-    print ("The estimated total time is: " + str(tot_time[0]) + " seconds.")
+    print("The estimated total time is: " + str(tot_time[0]) + " seconds.")
     return None
