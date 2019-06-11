@@ -27,7 +27,7 @@ Return (benchmark runtime)
 ### Component 4: (price_crawler)
 Input (None)  
 API connection to AWS real-time EC2 prices  
-Return (Price per hour of each instance in on-demand service)  
+Return (Price per hour of each instance in on-demand and spot priceing service)  
 
 ### Component 5: (recommender)
 Input (Times to run benchmark file on users machine from Component 2, expected total time from Component 3, time taken for the benchmark on AWS from Component 4, and EC2 spot prices from Component 5)  
