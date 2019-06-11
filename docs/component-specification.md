@@ -24,11 +24,11 @@ Fit four optimized curves to the data points using scipy:
 Choose the function with the best fit (smallest residuals)
 
 Output (expected total time on 100% data)
-  
+
 ### Component 4: (benchmark_runner)  
 Input (none)  
-Run known benchmark on user computer  
-Return (time taken for benchmark)  
+Run known benchmark on user computer(training of keras' percreptron on a full mnist dataset)  
+Return (benchmark runtime)  
 
 ### Component 5: (price_crawler)
 Input (None)  
@@ -40,3 +40,12 @@ Input (Times to run benchmark file on users machine from Component 2, expected t
 Create a dataframe of EC2 instances with added expected time and expected cost columns
 
 Output (Dataframe with cost and time estimates)  
+
+---
+### Components interaction
+1. User passes string that will be used to call the user's algorithm. String contains data_loc = <data csv path>, target_loc = <target csv path>, and any other parameters.
+2. algo_runner takes in the string. Subsets the data and target into small fractions and run user's algorithm on small sets of data. algo_runner returns the fractions of data used to run, and their respective runtime.
+3. total_time_component takes in this information and fit a curve through the data points. This is used to estimate the time user's algorithm will take to run at 100% of the data. total_time_component returns this estimate.
+4. Meanwhile, benchmark_runnner runs a predetermined menchmark test on user's computer. benchmark_runner retuns runtime of this benchmark test on user's computer.
+5. Meanwhile, aws_pricing crawls Amazon AWS API for spot and on demand prices at that moment.
+6. instance_recommender takes in the output from total_time_component(3), benchmark_runner(4), and aws_pricing(5) to merge them all into one table together with our own benchmark dataset on various AWS instance tpyes. This information is used to build a table of estimated time and cost to run uset's algorithm on various AWS instance types. This table is then sorted and filtered according to user's constraints.

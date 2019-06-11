@@ -7,12 +7,11 @@ Amazon Web Services (AWS) Elastic Compute Cloud (EC2) provides users with a vast
 - Researchers
 - Students
 - Corporate personnel
-The users are someone who familiar with programming multi-threaded or GPU accelerated algorithms on large datasets to be run on EC2 servers.  
+The users are someone who familiar with programming multi-threaded algorithms on large datasets to be run on EC2 servers.  
 
 ### Data sources.
-- AWS instance types: https://aws.amazon.com/ec2/instance-types/
-- Performance benchmark on EC2: https://www.phoronix.com/scan.php?page=article&item=amazon-ec2-feb2018&num=1
-- History of AWS spot prices (scraped from AWS API)
+- AWS instance benchmark data (self collected)
+- AWS spot and on demand prices (crawled when the script is run)
 
 ### Use cases. 
 <ol>
