@@ -95,22 +95,18 @@ def get_instance_pricing(instance_types):
                              DF_COL_ON_DEMAND_PRICE: []})
 
     for region_name in all_regions:
-        try:
-            spot_prices = get_spot_price(instance_types, region_name)
-            on_demand_prices = get_on_demand_price(instance_types, region_name)
-            both_prices = pd.merge(spot_prices, on_demand_prices,
-                                   on=DF_COL_INSTANCE_TYPE)
+        spot_prices = get_spot_price(instance_types, region_name)
+        on_demand_prices = get_on_demand_price(instance_types, region_name)
+        both_prices = pd.merge(spot_prices, on_demand_prices,
+                               on=DF_COL_INSTANCE_TYPE)
 
-            n_rows = both_prices.shape[0]
-            region_list = n_rows * [region_name]
-            both_prices[DF_COL_REGION] = region_list
-            both_prices = both_prices[[DF_COL_INSTANCE_TYPE, DF_COL_REGION,
-                                       DF_COL_SPOT_PRICE,
-                                       DF_COL_ON_DEMAND_PRICE]]
+        n_rows = both_prices.shape[0]
+        region_list = n_rows * [region_name]
+        both_prices[DF_COL_REGION] = region_list
+        both_prices = both_prices[[DF_COL_INSTANCE_TYPE, DF_COL_REGION,
+                                   DF_COL_SPOT_PRICE,
+                                   DF_COL_ON_DEMAND_PRICE]]
 
-            price_df = price_df.append(both_prices)
-        except (IndexError, KeyError):
-            LOGGER.warning('Failed to fetch Price for region {} in'
-                           .format(region_name))
+        price_df = price_df.append(both_prices)
 
     return price_df
