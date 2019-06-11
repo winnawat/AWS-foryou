@@ -1,5 +1,6 @@
 
 import os
+import numpy as np
 import pandas as pd
 from awsforyou import total_time_component
 from awsforyou import algo_runner
@@ -52,10 +53,13 @@ def demo(num_pts=3, num_iter=3):
     print('Running algo_runner, this may take a few moments.')
     times, percents = algo_runner.run_algo(PYTHON_CALL, MODULE_NAME,
                                            num_pts, num_iter)
-    tot_time = total_time_component.find_total_time(times, percents)[0]
     print('Finished algo_runner.')
+    model = total_time_component.find_total_time(times, percents)
+    tot_time = model[0]
 
-    print('Removing data files.')
+
+
+    print('Removing MNIST data files.')
     os.remove('data/mnist_data.csv')
     os.remove('data/mnist_target.csv')
 
@@ -64,11 +68,29 @@ def demo(num_pts=3, num_iter=3):
     all_times.append(tot_time)
     all_percents.append(100)
 
+    model_type = model[1]
+    x_plot = np.arange(0, 100, 0.1)
+    a_factor = model[2]
+    y_int = model[3]
+
+    if model_type == "linear":
+        y_plot = a_factor * x_plot + y_int
+    elif model_type == "nlogn":
+        y_plot = a_factor * np.multiply(x_plot, np.log(x_plot)) + y_int
+    elif model_type == "sqrd":
+        y_plot = a_factor * np.multiply(x_plot, x_plot) + y_int
+    elif model_type == "log":
+        y_plot = a_factor * np.log(x_plot) + y_int
+    else:
+        raise ValueError("model type must be linear, nlogn, sqrd, or log")
+
     print('Plotting results.')
     plt.plot(percents, times, 'ro')
-    plt.plot(all_percents, all_times, 'b', linewidth=2)
-    plt.xlim(0, max(tot_time + 0.1*tot_time, 100))
+    plt.plot(x_plot, y_plot, 'b', linewidth=2)
+    plt.plot(x_plot[-1], y_plot[-1], 'go', markersize=10)
+    plt.xlim(0, 110)
     plt.ylim(0, max(tot_time + 0.1*tot_time, 100))
     plt.gca().set_aspect('equal', adjustable='box')
     plt.show()
-    return tot_time
+    print ("The estimated total time is: " + str(tot_time[0]) + " seconds.")
+    return None

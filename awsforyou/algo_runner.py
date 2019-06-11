@@ -156,7 +156,7 @@ def run_algo(python_call, module_name, num_pts=3, num_iter=3):
                   ' complete.')
     percents = list(np.multiply(100, percents))
 
-    print('removing data files.')
+    print('Removing points data files.')
     for point in range(1, num_pts+1):
         if os.path.exists(this_dir + '/../data/data_' + str(point) + '.csv'):
             os.remove(this_dir + '/../data/data_' + str(point) + '.csv')
