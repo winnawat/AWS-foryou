@@ -9,7 +9,7 @@ Output (Projected price or time for each EC2 instance to complete the allotted t
 ### Component 2: (algo_runner)
 Input (.py file, dataset)  
 If dataset.rows <= 10,000:  
-Run the ,py file against 1%, 5%, 10% of dataset  
+Run the .py file against 1%, 5%, 10% of dataset  
 Else:  
 Run the .py file against 1,000, 5,000, 10,000 rows  
 Return time taken to run the .py file against the three datasets  
