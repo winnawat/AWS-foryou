@@ -42,7 +42,7 @@ def demo(num_pts=3, num_iter=3):
     # Create python call
     PYTHON_CALL = "run_mnist(data_loc = 'data/mnist_data.csv', target_loc = " \
                   "'data/mnist_target.csv')"
-    MODULE_NAME = 'keras_mnist'
+    MODULE_NAME = 'awsforyou.tests.test_keras_mnist'
 
     print('Running algo_runner, this may take a few moments.')
     times, percents = algo_runner.run_algo(PYTHON_CALL, MODULE_NAME,

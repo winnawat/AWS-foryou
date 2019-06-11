@@ -106,7 +106,7 @@ class TestAlgoRunner(unittest.TestCase):
                                    atol=0.001))
         return None
 
-    def test_algo_runner(self):
+    def test_run_algo(self):
         """
         tests the algo_runner functino in algo_runner.py
         :return: None
@@ -144,7 +144,9 @@ class TestAlgoRunner(unittest.TestCase):
         RUN_STRING = "run_mnist(data_loc='" + DATA_PATH + "', target_loc='" \
                      + TARGET_PATH + "')"
 
-        times, percents = algo_runner.run_algo(RUN_STRING, 'keras_mnist')
+        times, percents = algo_runner.run_algo(RUN_STRING,
+                                               'awsforyou.tests.'
+                                               'test_keras_mnist')
 
         self.assertTrue(isinstance(times, list))
         for item in times:
