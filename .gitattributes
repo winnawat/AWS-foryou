@@ -9,3 +9,4 @@
 *txt text eol=lf
 .git* text eol=lf
 .editor* text eol=lf
+MANIFEST* text eol=lf
