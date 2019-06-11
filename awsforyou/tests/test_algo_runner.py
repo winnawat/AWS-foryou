@@ -12,6 +12,7 @@ from sklearn.datasets import load_iris
 from sklearn.datasets import fetch_covtype
 from awsforyou import algo_runner
 
+
 class TestAlgoRunner(unittest.TestCase):
 
     def test_find_data_target(self):
