@@ -39,7 +39,8 @@ class TestRunBenchmark(unittest.TestCase):
 
     def test_aws_true(self):
         """
-        Uses mock to simulate the situation where aws = Test
+        Tests a situation when benchmark_runner is run on AWS.
+        Uses mock to simulate the situation where aws = True
         """
 
         mock_instancetype_region = \
