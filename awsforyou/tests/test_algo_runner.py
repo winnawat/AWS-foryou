@@ -3,6 +3,7 @@ Module that runs a simple perceptron on MNIST dataset.
 """
 
 import os
+import shutil
 import unittest
 import numpy as np
 import pandas as pd
@@ -158,8 +159,5 @@ class TestAlgoRunner(unittest.TestCase):
         self.assertTrue(isinstance(percents, list))
         for item in percents:
             self.assertTrue(isinstance(item, float))
-
-        print('Removing data files.')
-        os.remove(this_dir + '/data')
 
         return None

@@ -6,6 +6,7 @@ component.
 
 import importlib
 import re
+import shutil
 import time
 import numpy as np
 import pandas as pd
@@ -156,6 +157,22 @@ def run_algo(python_call, module_name, num_pts=3, num_iter=3):
     percents = list(np.multiply(100, percents))
 
     print('removing data files.')
-    os.remove(this_dir + '/data')
+    for point in range(1, num_pts+1):
+        if os.path.exists(this_dir + '/../data/data_' + str(point) + '.csv'):
+            os.remove(this_dir + '/../data/data_' + str(point) + '.csv')
+        else:
+            pass
+        if os.path.exists(this_dir + '/../data/target_' + str(point) + '.csv'):
+            os.remove(this_dir + '/../data/target_' + str(point) + '.csv')
+        else:
+            pass
+    if os.path.exists(this_dir + '/data'):
+        os.rmdir(this_dir + '/data')
+    else:
+        pass
+
+    # If run in test mode, delete test data download files
+    if os.path.exists(this_dir + '/tests/data'):
+        shutil.rmtree(this_dir + '/tests/data')
 
     return times, percents
