@@ -2,8 +2,6 @@
 This module creates a dataframe with time and price estimates, this is used by
 the GUI to recommend the least expensive or fastest options
 """
-
-
 from awsforyou import algo_runner as ar
 from awsforyou import benchmark_runner as br
 from awsforyou import total_time_component as tt
@@ -27,20 +25,21 @@ def get_benchmark_data():
     return benchmark
 
 
-def add_estimated_time_aws(complete_df):
+def add_estimated_time_aws(dataframe, python_call, module_name):
     """
     This function estimates the time required to run the users algorithim on
     each instance and adds it to the dataframe
+    :param python_call: str python string calling the algorithm to be timed
+    :param module_name: str name of module from which function is called
+    :param dataframe: the benchmark dataframe output from get_benchmark_data()
+    :return: dataframe with added estimated times
     """
-    times, percents = ar.run_algo(
-        "run_mnist(data_loc = 'mnist_data/mnist_data_20k.csv', "
-        "target_loc = 'mnist_data/mnist_target_20k.csv')",
-        'awsforyou.keras_mnist', 3, 3)
+    times, percents = ar.run_algo(python_call, module_name)
     est_time_user = tt.find_total_time(times, percents)
     user_benchmark = br.run_benchmark()
-    est_time_aws = complete_df[['runtime']]/user_benchmark * est_time_user[0]
-    complete_df["estimated_time_aws"] = est_time_aws
-    return complete_df
+    est_time_aws = dataframef[['runtime']]/user_benchmark * est_time_user[0]
+    dataframe["estimated_time_aws"] = est_time_aws
+    return dataframe
 
 
 def add_estimated_price(df):
@@ -57,12 +56,12 @@ def add_estimated_price(df):
     return complete_df
 
 
-def create_dataframe():
+def create_dataframe(python_call, module_name):
     """
     This function creates the completed dataframe by calling the functions:
     get_benchmark_data, add_estimated_time_aws, and add_estimated_price.
     """
     benchmark_df = get_benchmark_data()
-    bench_time_df = add_estimated_time_aws(benchmark_df)
+    bench_time_df = add_estimated_time_aws(benchmark_df, python_call, module_name)
     complete_df = add_estimated_price(bench_time_df)
     return complete_df
