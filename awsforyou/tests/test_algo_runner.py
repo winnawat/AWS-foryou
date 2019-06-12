@@ -180,11 +180,13 @@ class TestAlgoRunner(unittest.TestCase):
         :return: None
         """
         df = pd.DataFrame(np.array([1, 2, 3, 4, 5, 6]))
-        df.to_csv('dummy_csv')
-        data_path = 'dummy_csv.csv'
-        run_string = "run_mnist(data_loc='" + data_path + \
-                     ", target_loc=bah.notcsv)"
 
+        this_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_path = os.path.join(this_dir, "dummy_csv.csv")
+        df.to_csv(csv_path)
+        data_path = os.path.join(this_dir, "dummy_csv.csv")
+        run_string = "run_mnist(data_loc='" + data_path + \
+                     "', target_loc=bah.notcsv)"
         self.assertRaises(ValueError, algo_runner.run_algo,
                           run_string, 'awsforyou.tests.test_keras_mnist')
 
