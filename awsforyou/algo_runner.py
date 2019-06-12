@@ -136,7 +136,6 @@ def run_algo(python_call, module_name, num_pts=3, num_iter=3):
     if target_suffix == 'csv':
         target = pd.read_csv(target_call, index_col=0)
     else:
-        print("target no csv")  # delete this
         raise ValueError('data and target must be of type csv')
 
     pct_examples_list = select_data(data, target, num_pts)
