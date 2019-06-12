@@ -8,6 +8,8 @@ from awsforyou import total_time_component as tt
 from awsforyou import aws_pricing as ap
 import pandas as pd
 
+SECSINHR = 3600
+
 
 def get_benchmark_data():
     """
@@ -50,9 +52,10 @@ def add_estimated_price(df):
     price = ap.get_instance_pricing(instance_types)
     complete_df = pd.merge(df, price, on="instance_type")
     complete_df["est_cost_spot_price"] = \
-        complete_df["estimated_time_aws"]*complete_df["spot_price"]/3600
+        complete_df["estimated_time_aws"]*complete_df["spot_price"]/SECSINHR
     complete_df["est_cost_on_demand_price"] = \
-        complete_df["estimated_time_aws"]*complete_df["on_demand_price"]/3600
+        complete_df["estimated_time_aws"] \
+        * complete_df["on_demand_price"]/SECSINHR
     return complete_df
 
 

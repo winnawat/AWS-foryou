@@ -66,6 +66,11 @@ class TestRecommender(unittest.TestCase):
         complete_df = rc.add_estimated_price(updated_df)
         self.assertIsNotNone(complete_df)
 
+    def test_create_dataframe(self):
+        ar.run_algo = mock_run_algo
+        created_df = rc.create_dataframe('', '')
+        self.assertIsNotNone(created_df)
+
 
 def mock_run_algo(python_call, module_name):
     return [2, 4, 6], [1, 5, 10]
