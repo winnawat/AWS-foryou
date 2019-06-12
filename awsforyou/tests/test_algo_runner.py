@@ -162,12 +162,24 @@ class TestAlgoRunner(unittest.TestCase):
 
         return None
 
-    def test_run_algo_nocsv(self):
+    def test_run_algo_datanocsv(self):
         """
         tests the algo_runner functino in algo_runner.py
         :return: None
         """
         run_string = "run_mnist(data_loc=foo.notcsv, target_loc=bah.notcsv)"
+
+        self.assertRaises(ValueError, algo_runner.run_algo,
+                          run_string, 'awsforyou.tests.test_keras_mnist')
+
+        return None
+
+    def test_run_algo_targetnocsv(self):
+        """
+        tests the algo_runner functino in algo_runner.py
+        :return: None
+        """
+        run_string = "run_mnist(data_loc=foo.csv, target_loc=bah.notcsv)"
 
         self.assertRaises(ValueError, algo_runner.run_algo,
                           run_string, 'awsforyou.tests.test_keras_mnist')
