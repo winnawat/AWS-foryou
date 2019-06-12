@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="awsforyou",
-    version="0.0.1",
+    version="1.0.0",
     author=["Vivek Kumar", "John Mahoney", "Win Nawat S", "Peter Meleney"],
     author_email=["vivekuma@uw.edu", "jm888@uw.edu", "nawats@uw.edu", "pmeleney@uw.edu"],
     description="Instance in an Instant",
