@@ -161,3 +161,15 @@ class TestAlgoRunner(unittest.TestCase):
             self.assertTrue(isinstance(item, float))
 
         return None
+
+    def test_run_algo_nocsv(self):
+        """
+        tests the algo_runner functino in algo_runner.py
+        :return: None
+        """
+        run_string = "run_mnist(data_loc=foo.notcsv, target_loc=bah.notcsv)"
+
+        self.assertRaises(ValueError, algo_runner.run_algo,
+                          run_string, 'awsforyou.tests.test_keras_mnist')
+
+        return None
