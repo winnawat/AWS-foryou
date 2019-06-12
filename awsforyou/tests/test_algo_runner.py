@@ -179,7 +179,11 @@ class TestAlgoRunner(unittest.TestCase):
         tests the algo_runner functino in algo_runner.py
         :return: None
         """
-        run_string = "run_mnist(data_loc=foo.csv, target_loc=bah.notcsv)"
+        df = pd.DataFrame(np.array([1, 2, 3, 4, 5, 6]))
+        df.to_csv('dummy_csv')
+        data_path = 'dummy_csv.csv'
+        run_string = "run_mnist(data_loc='" + data_path + \
+                     ", target_loc=bah.notcsv)"
 
         self.assertRaises(ValueError, algo_runner.run_algo,
                           run_string, 'awsforyou.tests.test_keras_mnist')
