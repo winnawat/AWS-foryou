@@ -50,4 +50,9 @@ Output (A sortable HTML table consisting of instances with their associated cost
 4. Meanwhile, benchmark_runnner runs a predetermined menchmark test on user's computer. benchmark_runner retuns runtime of this benchmark test on user's computer.
 5. Meanwhile, aws_pricing crawls Amazon AWS API for spot and on demand prices at that moment.
 6. recommender takes in the output from total_time_component(3), benchmark_runner(4), and aws_pricing(5) to merge them all into one dataframe together with our own benchmark dataset on various AWS instance tpyes. This dataframe is passed to the report_generator.
-7. report_generator takes the dataframe and builds a table of estimated time and cost to run uset's algorithm on various AWS instance types. This table is then sorted and filtered according to user's constraints.
+7. report_generator takes the dataframe and builds a table of estimated time and cost to run uset's algorithm on various AWS instance types. This table is then returned as a HTML wile which allows users to sort and filter according to user's constraints.
+
+---
+### The Output
+The HTML file created by report_generator:
+![sample_reccommendation](./sample-recommendation.PNG)
