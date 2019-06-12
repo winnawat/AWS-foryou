@@ -87,3 +87,8 @@ pip install awsforyou-0.0.1-py3-none-any.whl
 
 To see how to use the package to get instance recommendation, 
 refer to the [example notebook](examples/examples.ipynb)
+
+---
+## The Output
+Below is an image of how the output of our recommendation looks like.
+![sample_reccommendation](./docs/sample-recommendation.PNG)
