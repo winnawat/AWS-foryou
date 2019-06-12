@@ -6,12 +6,12 @@ from awsforyou import total_time_component
 TIMES_LIN = np.array([1, 5, 10])
 TIMES_NLOGN = np.array([0, 8.04718956, 23.02585093])
 TIMES_LOG = np.array([1, 8, 11])
-TIMES_SQRD = np.array([1, 5, 10])
+TIMES_SQRD = np.array([1, 25, 100])
 
 EXPT_TIME_LIN = 100
 EXPT_TIME_NLOGN_RANGE = [459, 461]
 EXPT_TIME_LOG_RANGE = [20, 22]
-EXPT_TIME_SQRD = [10000]
+EXPT_TIME_SQRD = 10000
 
 
 class TestCalc(unittest.TestCase):
@@ -47,4 +47,5 @@ class TestCalc(unittest.TestCase):
         test for squared time
         """
         calc_sqrd = int(total_time_component.find_total_time(TIMES_SQRD)[0])
-        self.assertAlmostEqual(calc_sqrd, EXPT_TIME_LIN)
+        print(calc_sqrd)
+        self.assertAlmostEqual(EXPT_TIME_SQRD, calc_sqrd)
